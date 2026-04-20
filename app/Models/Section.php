@@ -28,7 +28,6 @@ class Section extends Model
     public array $translatable = ['title', 'subtitle', 'body', 'cta_label', 'cta_link'];
 
     protected $casts = [
-        'image_path' => 'array',
         'data' => 'array',
         'order' => 'integer',
     ];

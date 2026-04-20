@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     use HasFactory, Notifiable;
 
@@ -25,4 +27,14 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if (app()->environment('local')) {
+            return true;
+        }
+
+        return str_ends_with($this->email, '@restaurant-mamiviet.com')
+            || $this->email === 'admin@gmail.com';
+    }
 }
