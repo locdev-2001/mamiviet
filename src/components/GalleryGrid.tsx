@@ -368,7 +368,7 @@ export default function GalleryGrid({ withTitle = false, className = "" }: { wit
         {posts.map((post, idx) => (
           <div
             key={post.id}
-            className="cursor-pointer hover:opacity-90 transition-opacity duration-300 min-h-[600px]"
+            className="cursor-pointer hover:opacity-90 transition-opacity duration-300 min-h-[900px] sm:min-h-[700px]"
             style={{ animation: `fadeIn 0.7s ${idx * 0.07}s both` }}
             onClick={() => handleOpen(post)}
           >
