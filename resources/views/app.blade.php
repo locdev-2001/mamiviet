@@ -25,7 +25,7 @@
     </script>
 
     @viteReactRefresh
-    @vite(['src/index.css', 'src/styles/font.css', 'src/styles/main.css', 'src/main.tsx'])
+    @vite(['src/index.css', 'src/styles/font.css', 'src/main.tsx'])
 </head>
 <body>
     <div id="root"></div>

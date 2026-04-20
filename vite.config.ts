@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig({
   plugins: [
     laravel({
-      input: ["src/index.css", "src/styles/font.css", "src/styles/main.css", "src/main.tsx"],
+      input: ["src/index.css", "src/styles/font.css", "src/main.tsx"],
       refresh: true,
     }),
     react(),
@@ -14,6 +14,24 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+    },
+  },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'i18n': ['i18next', 'react-i18next', 'i18next-browser-languagedetector'],
+          'query': ['@tanstack/react-query', 'axios'],
+          'ui-radix': [
+            '@radix-ui/react-toast',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-slot',
+          ],
+        },
+      },
     },
   },
 });
