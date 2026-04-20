@@ -3,17 +3,16 @@
 namespace App\Filament\Resources\PageResource\Pages;
 
 use App\Filament\Resources\PageResource;
+use App\Models\Page;
 use Filament\Resources\Pages\CreateRecord;
-use Filament\Resources\Pages\CreateRecord\Concerns\Translatable;
+use Illuminate\Database\Eloquent\Model;
 
 class CreatePage extends CreateRecord
 {
-    use Translatable;
-
     protected static string $resource = PageResource::class;
 
-    protected function getHeaderActions(): array
+    protected function handleRecordCreation(array $data): Model
     {
-        return [$this->getLocaleSwitcherAction()];
+        return PageResource::applyFormDataToRecord(new Page(), $data);
     }
 }

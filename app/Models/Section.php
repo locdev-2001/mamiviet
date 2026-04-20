@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Translatable\HasTranslations;
 
 class Section extends Model
@@ -44,5 +45,21 @@ class Section extends Model
     public function page(): BelongsTo
     {
         return $this->belongsTo(Page::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::updating(function (self $section) {
+            $original = $section->getOriginal('image_path');
+            if ($original && $original !== $section->image_path) {
+                Storage::disk('public')->delete($original);
+            }
+        });
+
+        static::deleted(function (self $section) {
+            if ($section->image_path) {
+                Storage::disk('public')->delete($section->image_path);
+            }
+        });
     }
 }
