@@ -1,6 +1,5 @@
 @php
-    $site = \App\Models\Setting::group('site');
-    $name = $site['site_name'] ?? config('app.name');
+    $name = \App\Models\Setting::get('footer.company_name') ?: config('app.name');
     $url = rtrim(config('app.url'), '/');
 @endphp
 <script type="application/ld+json">

@@ -74,14 +74,9 @@ class InstagramScraperService
      */
     private function getInstagramConfig()
     {
-        $config = Setting::where('group', 'instagram_post_scrapper')
-            ->whereIn('key', ['username', 'token'])
-            ->pluck('value', 'key')
-            ->toArray();
-
         return [
-            'username' => $config['username'] ?? '',
-            'token' => $config['token'] ?? ''
+            'username' => (string) (Setting::get('instagram.username') ?? env('INSTAGRAM_USERNAME', '')),
+            'token' => (string) (Setting::get('instagram.token') ?? env('INSTAGRAM_API_TOKEN', '')),
         ];
     }
 

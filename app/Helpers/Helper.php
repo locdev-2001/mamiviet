@@ -2,10 +2,9 @@
 
 use App\Models\Setting;
 
-if (!function_exists('setting'))
-{
-    function setting(string $group, string $key, $default = null)
+if (! function_exists('setting')) {
+    function setting(string $key, ?string $locale = null, mixed $default = null): mixed
     {
-        return Setting::where('group', $group)->where('key', $key)->first()->value ?? $default;
+        return Setting::get($key, $locale, $default);
     }
 }

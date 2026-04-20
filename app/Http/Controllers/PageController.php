@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\HomepageContentResource;
 use App\Models\Page;
+use App\Models\Setting;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Log;
 
 class PageController extends Controller
 {
@@ -21,18 +24,17 @@ class PageController extends Controller
     private function renderPage(string $slugDe): View
     {
         $locale = App::getLocale();
+        $isHome = $slugDe === 'home';
 
-        $page = Page::published()
+        $page = Page::when($isHome, fn ($q) => $q->with('sections.media'))
             ->whereJsonContains('slug->de', $slugDe)
             ->first();
 
-        $seo = $page?->getTranslation('seo', $locale) ?: [];
-
-        $isHome = $slugDe === 'home';
         $data = [
             'locale' => $locale,
-            'seo' => $this->buildSeo($seo, $slugDe, $locale),
+            'seo' => $this->buildSeo($slugDe, $locale),
             'isHome' => $isHome,
+            'appContent' => $this->buildAppContent($page, $locale, $isHome),
         ];
 
         if (! $isHome) {
@@ -40,6 +42,28 @@ class PageController extends Controller
         }
 
         return view('app', $data);
+    }
+
+    private function buildAppContent(?Page $page, string $locale, bool $isHome): array
+    {
+        $payload = [
+            'locale' => $locale,
+            'settings' => Setting::forLocale($locale),
+        ];
+
+        if (! $isHome) {
+            return $payload;
+        }
+
+        if (! $page) {
+            Log::warning('Homepage render fallback: no page with slug "home" found — UI will use i18n fallback.');
+
+            return $payload;
+        }
+
+        $payload['homepage'] = HomepageContentResource::forLocale($page, $locale);
+
+        return $payload;
     }
 
     private function buildBreadcrumb(string $slugDe, string $locale): array
@@ -58,7 +82,7 @@ class PageController extends Controller
         ];
     }
 
-    private function buildSeo(array $pageSeo, string $slugDe, string $locale): array
+    private function buildSeo(string $slugDe, string $locale): array
     {
         $defaults = [
             'de' => [
@@ -71,9 +95,12 @@ class PageController extends Controller
             ],
         ];
 
+        $pageKey = $slugDe === 'bilder' ? 'bilder' : 'home';
         $fallback = $defaults[$locale] ?? $defaults['de'];
-        $title = $pageSeo['title'] ?? $fallback['title'];
-        $description = $pageSeo['description'] ?? $fallback['description'];
+
+        $title = Setting::get("seo.{$pageKey}.title", $locale) ?: $fallback['title'];
+        $description = Setting::get("seo.{$pageKey}.description", $locale) ?: $fallback['description'];
+        $ogImage = Setting::get('seo.og_image') ?: '/logo.png';
 
         $pathMap = [
             'home' => ['de' => '/', 'en' => '/en'],
@@ -91,7 +118,8 @@ class PageController extends Controller
                 'de' => $base . $paths['de'],
                 'en' => $base . $paths['en'],
             ],
-            'og_image' => $this->safeUrl($pageSeo['og_image'] ?? null) ?? '/logo.png',
+            'og_image' => $this->safeUrl($ogImage) ?? '/logo.png',
+            'google_site_verification' => (string) (Setting::get('seo.google_site_verification') ?: ''),
         ];
     }
 
@@ -102,6 +130,9 @@ class PageController extends Controller
         }
         if (str_starts_with($url, '/')) {
             return $url;
+        }
+        if (! str_starts_with($url, 'http')) {
+            return '/storage/' . ltrim($url, '/');
         }
         $scheme = parse_url($url, PHP_URL_SCHEME);
         return in_array($scheme, ['http', 'https'], true) ? $url : null;

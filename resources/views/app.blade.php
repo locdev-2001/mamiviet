@@ -22,7 +22,15 @@
 
     <script>
         window.__APP_LOCALE__ = @json($locale);
+        window.__APP_CONTENT__ = @json($appContent ?? null);
     </script>
+
+    @php($heroMedia = $appContent['homepage']['hero']['media']['bg'] ?? null)
+    @if ($heroMedia && ! empty($heroMedia['srcset']))
+        <link rel="preload" as="image"
+              imagesrcset="{{ $heroMedia['srcset'] }}"
+              imagesizes="100vw" fetchpriority="high">
+    @endif
 
     @viteReactRefresh
     @vite(['src/index.css', 'src/styles/font.css', 'src/main.tsx'])

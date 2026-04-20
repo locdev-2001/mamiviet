@@ -1,15 +1,16 @@
-import { useState } from "react";
-import { X } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { GloriaFoodButton } from "@/components/GloriaFoodButton";
+import { useSetting } from '@/lib/contexts/AppContentContext';
+import { GloriaFoodButton } from '@/components/GloriaFoodButton';
+import { X } from 'lucide-react';
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const NAV_KEYS = [
-  { key: "home", href: "/" },
-  { key: "menu", href: "/menu" },
-  { key: "bilder", href: "/bilder" },
-  { key: "kontakt", scroll: true, target: 'contact' },
-];
+const NAV_ITEMS = [
+  { key: 'home', href: '/' },
+  { key: 'menu', href: '/menu' },
+  { key: 'bilder', href: '/bilder' },
+  { key: 'kontakt', scroll: true, target: 'contact' },
+] as const;
 
 const LOCALE_PATH_MAP: Record<string, Record<string, string>> = {
   '/': { en: '/en' },
@@ -18,17 +19,34 @@ const LOCALE_PATH_MAP: Record<string, Record<string, string>> = {
   '/en/gallery': { de: '/bilder' },
 };
 
-export function Header({ scrollToRef }) {
+export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void } = {}) {
   const [open, setOpen] = useState(false);
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const onCLickScroll = (target) => {
-    if (location.pathname === "/") {
-      scrollToRef(target);
+  const hoursLine = useSetting('header.hours', t('header.hours'));
+  const hotlineLine = useSetting('header.hotline', t('header.hotline'));
+  const locationsLine = useSetting('header.locations', t('header.locations'));
+
+  const navHome = useSetting('header.nav.home', t('header.home'));
+  const navMenu = useSetting('header.nav.menu', t('header.menu'));
+  const navBilder = useSetting('header.nav.bilder', t('header.bilder'));
+  const navKontakt = useSetting('header.nav.kontakt', t('header.kontakt'));
+
+  const navLabels: Record<string, string> = {
+    home: navHome,
+    menu: navMenu,
+    bilder: navBilder,
+    kontakt: navKontakt,
+  };
+  const navLabel = (key: string) => navLabels[key] ?? key;
+
+  const onClickScroll = (target: string) => {
+    if (location.pathname === '/' || location.pathname === '/en') {
+      scrollToRef?.(target);
     } else {
-      navigate("/", { state: { scrollTo: target } });
+      navigate('/', { state: { scrollTo: target } });
     }
   };
 
@@ -44,7 +62,7 @@ export function Header({ scrollToRef }) {
       {/* Mobile header */}
       <div className="md:hidden flex items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center space-x-2 z-50">
-          <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} width="220" height="223" className="h-12 w-auto" />
+          <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} width={220} height={223} className="h-12 w-auto" />
         </Link>
         <div className="flex items-center space-x-4">
           <button
@@ -70,50 +88,57 @@ export function Header({ scrollToRef }) {
       <div className="hidden md:block">
         <div className="px-6 py-2 text-center border-b border-white/10" style={{ backgroundColor: '#1f1c17' }}>
           <div className="flex items-center justify-center gap-8 text-sm text-white/80">
-            <span>{t('header.hours')}</span>
-            <span className="hidden lg:inline">|</span>
-            <span className="hidden lg:inline">{t('header.hotline')}</span>
-            <span className="hidden xl:inline">|</span>
-            <span className="hidden xl:inline">{t('header.locations')}</span>
+            {hoursLine && <span>{hoursLine}</span>}
+            {hotlineLine && <span className="hidden lg:inline">|</span>}
+            {hotlineLine && <span className="hidden lg:inline">{hotlineLine}</span>}
+            {locationsLine && <span className="hidden xl:inline">|</span>}
+            {locationsLine && <span className="hidden xl:inline">{locationsLine}</span>}
           </div>
         </div>
 
         <div className="grid grid-cols-3 items-center px-6 py-3">
           <nav className="flex items-center justify-start space-x-6">
-            {NAV_KEYS.map((item) => (
-              item.scroll ? (
-                <button
-                  key={item.key}
-                  onClick={() => onCLickScroll(item.target)}
-                  className="text-white hover:text-primary transition-colors text-sm font-medium px-3 py-2 rounded uppercase tracking-wider whitespace-nowrap"
-                >
-                  {t(`header.${item.key}`)}
-                </button>
-              ) : item.key === 'menu' ? (
-                <GloriaFoodButton
-                  key={item.key}
-                  cuid="ea4b98df-3398-4fc2-bde2-9bb461488df0"
-                  ruid="d125f5d8-a9d0-4610-94f8-de39e8dac4f4"
-                  type="order"
-                  className="!bg-transparent !bg-none !text-white hover:!text-primary !transition-colors !text-sm !font-medium !px-3 !py-2 !rounded !uppercase !tracking-wider !whitespace-nowrap"
-                >
-                  {t(`header.${item.key}`)}
-                </GloriaFoodButton>
-              ) : (
+            {NAV_ITEMS.map((item) => {
+              const label = navLabel(item.key);
+              if ('scroll' in item && item.scroll) {
+                return (
+                  <button
+                    key={item.key}
+                    onClick={() => onClickScroll(item.target)}
+                    className="text-white hover:text-primary transition-colors text-sm font-medium px-3 py-2 rounded uppercase tracking-wider whitespace-nowrap"
+                  >
+                    {label}
+                  </button>
+                );
+              }
+              if (item.key === 'menu') {
+                return (
+                  <GloriaFoodButton
+                    key={item.key}
+                    cuid="ea4b98df-3398-4fc2-bde2-9bb461488df0"
+                    ruid="d125f5d8-a9d0-4610-94f8-de39e8dac4f4"
+                    type="order"
+                    className="!bg-transparent !bg-none !text-white hover:!text-primary !transition-colors !text-sm !font-medium !px-3 !py-2 !rounded !uppercase !tracking-wider !whitespace-nowrap"
+                  >
+                    {label}
+                  </GloriaFoodButton>
+                );
+              }
+              return (
                 <Link
                   key={item.key}
-                  to={item.href}
+                  to={item.href!}
                   className="text-white hover:text-primary transition-colors text-sm font-medium px-3 py-2 rounded uppercase tracking-wider whitespace-nowrap"
                 >
-                  {t(`header.${item.key}`)}
+                  {label}
                 </Link>
-              )
-            ))}
+              );
+            })}
           </nav>
 
           <div className="flex items-center justify-center">
             <Link to="/" className="flex items-center space-x-3">
-              <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} width="220" height="223" className="h-14 w-auto" />
+              <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} width={220} height={223} className="h-14 w-auto" />
             </Link>
           </div>
 
@@ -151,31 +176,46 @@ export function Header({ scrollToRef }) {
           </button>
           <nav className="w-full max-w-xs bg-black/95 h-full p-8 pt-0 flex flex-col space-y-6">
             <div className="mb-8 mt-4 flex items-center space-x-2">
-              <img src="/logo.png" alt="Mamiviet logo" width="220" height="223" className="h-12 w-auto" />
+              <img src="/logo.png" alt="Mamiviet logo" width={220} height={223} className="h-12 w-auto" />
               <span className="text-lg font-bold tracking-widest">{t('header.logo_text', 'Mamiviet.')}</span>
             </div>
-            {NAV_KEYS.map((item) => (
-              item.key === 'menu' ? (
-                <GloriaFoodButton
-                  key={item.key}
-                  cuid="ea4b98df-3398-4fc2-bde2-9bb461488df0"
-                  ruid="d125f5d8-a9d0-4610-94f8-de39e8dac4f4"
-                  type="order"
-                  className="!block !py-2 !text-lg !font-medium !text-white hover:!text-primary !transition-colors !bg-transparent !bg-none"
-                >
-                  {t(`header.${item.key}`)}
-                </GloriaFoodButton>
-              ) : (
+            {NAV_ITEMS.map((item) => {
+              const label = navLabel(item.key);
+              if (item.key === 'menu') {
+                return (
+                  <GloriaFoodButton
+                    key={item.key}
+                    cuid="ea4b98df-3398-4fc2-bde2-9bb461488df0"
+                    ruid="d125f5d8-a9d0-4610-94f8-de39e8dac4f4"
+                    type="order"
+                    className="!block !py-2 !text-lg !font-medium !text-white hover:!text-primary !transition-colors !bg-transparent !bg-none"
+                  >
+                    {label}
+                  </GloriaFoodButton>
+                );
+              }
+              if ('scroll' in item && item.scroll) {
+                return (
+                  <button
+                    key={item.key}
+                    onClick={() => { setOpen(false); onClickScroll(item.target); }}
+                    className="block py-2 text-lg font-medium text-white hover:text-primary transition-colors text-left"
+                  >
+                    {label}
+                  </button>
+                );
+              }
+              return (
                 <Link
                   key={item.key}
-                  to={item.href}
+                  to={item.href!}
                   className="block py-2 text-lg font-medium text-white hover:text-primary transition-colors"
                   onClick={() => setOpen(false)}
                 >
-                  {t(`header.${item.key}`)}
+                  {label}
                 </Link>
-              )
-            ))}
+              );
+            })}
           </nav>
         </div>
       )}

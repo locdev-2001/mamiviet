@@ -31,7 +31,7 @@ class PagesSeeder extends Seeder
             ]
         );
 
-        $bilder = Page::updateOrCreate(
+        Page::updateOrCreate(
             ['id' => 2],
             [
                 'slug' => ['de' => 'bilder', 'en' => 'gallery'],
@@ -49,66 +49,125 @@ class PagesSeeder extends Seeder
             ]
         );
 
-        $sections = $this->buildHomeSections($de, $en);
-
-        foreach ($sections as $order => $section) {
-            Section::updateOrCreate(
-                ['page_id' => $home->id, 'type' => $section['type']],
-                array_merge($section, ['page_id' => $home->id, 'order' => $order + 1])
+        foreach ($this->buildHomepageSections($de, $en) as $order => [$key, $content, $data]) {
+            $section = Section::updateOrCreate(
+                ['page_id' => $home->id, 'key' => $key],
+                [
+                    'enabled' => true,
+                    'order' => $order + 1,
+                    'data' => $data,
+                ]
             );
+
+            $section->setTranslation('content', 'de', $content['de']);
+            $section->setTranslation('content', 'en', $content['en']);
+            $section->save();
         }
     }
 
-    private function buildHomeSections(array $de, array $en): array
+    private function buildHomepageSections(array $de, array $en): array
     {
-        $pick = fn (string $path, $fallback = '') => [
-            'de' => data_get($de, $path, $fallback),
-            'en' => data_get($en, $path, $fallback),
-        ];
+        $de = $de['homepage'] ?? [];
+        $en = $en['homepage'] ?? [];
 
-        $introBody = [
-            'de' => trim(($de['homepage']['intro_text1'] ?? '') . "\n\n" . ($de['homepage']['intro_text2'] ?? '')),
-            'en' => trim(($en['homepage']['intro_text1'] ?? '') . "\n\n" . ($en['homepage']['intro_text2'] ?? '')),
+        $pair = fn (array $dePath, array $enPath) => [
+            'de' => $this->pick($de, $dePath),
+            'en' => $this->pick($en, $enPath),
         ];
 
         return [
-            [
-                'type' => 'hero',
-                'title' => $pick('homepage.hero_title'),
-                'subtitle' => $pick('homepage.welcome_section.tagline'),
-                'cta_label' => $pick('homepage.welcome_section.order_online'),
-                'cta_link' => ['de' => '#menu', 'en' => '#menu'],
-            ],
-            [
-                'type' => 'intro',
-                'title' => $pick('homepage.welcome_section.welcome_title'),
-                'body' => $pick('homepage.welcome_section.welcome_text'),
-            ],
-            [
-                'type' => 'featured_dishes',
-                'title' => $pick('homepage.welcome_section.cuisine_title'),
-                'subtitle' => $pick('homepage.welcome_section.brand_name'),
-                'body' => $introBody,
-            ],
-            [
-                'type' => 'gallery_teaser',
-                'title' => $pick('homepage.gallery_section.title'),
-                'subtitle' => $pick('homepage.gallery_section.subtitle'),
-                'cta_label' => $pick('header.bilder', 'Bilder'),
-                'cta_link' => ['de' => '/bilder', 'en' => '/en/gallery'],
-            ],
-            [
-                'type' => 'story',
-                'title' => $pick('homepage.welcome_section.second_section.title'),
-                'body' => $pick('homepage.welcome_section.second_section.text'),
-            ],
-            [
-                'type' => 'contact_cta',
-                'title' => $pick('homepage.contact_section.title'),
-                'subtitle' => $pick('homepage.contact_section.address'),
-                'cta_label' => $pick('header.kontakt', 'Kontakt'),
-                'cta_link' => ['de' => 'mailto:info@merseburger-hof.eu', 'en' => 'mailto:info@merseburger-hof.eu'],
-            ],
+            ['hero', $this->sectionPair(
+                ['title' => 'hero_title'],
+                $de,
+                $en,
+            ), null],
+
+            ['welcome', $this->sectionPair([
+                'brand_name' => 'welcome_section.brand_name',
+                'tagline' => 'welcome_section.tagline',
+                'cuisine_label' => 'welcome_section.cuisine_title',
+                'title' => 'welcome_section.welcome_title',
+                'body' => 'welcome_section.welcome_text',
+                'cta_label' => 'welcome_section.order_online',
+            ], $de, $en), null],
+
+            ['welcome_second', $this->sectionPair([
+                'cuisine_label' => 'welcome_section.cuisine_title',
+                'title' => 'welcome_section.second_section.title',
+                'body' => 'welcome_section.second_section.text',
+                'cta_label' => 'welcome_section.second_section.read_more',
+            ], $de, $en), null],
+
+            ['order', $this->sectionPair([
+                'title' => 'order_section.title',
+                'takeaway' => 'order_section.takeaway',
+                'delivery' => 'order_section.delivery',
+                'reservation' => 'order_section.reservation',
+                'free_delivery' => 'order_section.free_delivery',
+                'cta_label' => 'order_section.order_button',
+            ], $de, $en), null],
+
+            ['reservation', $this->sectionPair([
+                'title' => 'reservation_section.title',
+                'subtitle' => 'reservation_section.subtitle',
+                'note' => 'reservation_section.note',
+                'cta_label' => 'reservation_section.submit',
+                'overlay_text' => 'reservation_section.overlay_title',
+                'overlay_subtitle' => 'reservation_section.overlay_subtitle',
+            ], $de, $en), null],
+
+            ['contact', $this->sectionPair([
+                'title' => 'contact_section.title',
+                'restaurant_name' => 'contact_section.restaurant_name',
+                'address' => 'contact_section.address',
+                'phone' => 'contact_section.phone',
+                'email' => 'contact_section.email',
+                'instagram_label' => 'contact_section.ig_name',
+            ], $de, $en), [
+                'instagram_url' => $de['contact_section']['instagram'] ?? null,
+                'map_embed' => 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2492.5538579536387!2d12.32732896718416!3d51.33772531772187!2m3!1f0!2f0!3f0!3m2!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47a6f79bfe53d701%3A0x89dcff2537a6fce5!2sMami%20Viet%20-%20SUSHI%20-%20Asian%20Cuisine!5e0!3m2!1svi!2s!4v1761356364892!5m2!1svi!2s',
+            ]],
+
+            ['gallery_slider', $this->sectionPair([
+                'title' => 'gallery_section.title',
+                'subtitle' => 'gallery_section.subtitle',
+            ], $de, $en), null],
+
+            ['intro', [
+                'de' => [
+                    'title' => $de['intro_title'] ?? '',
+                    'text1' => $de['intro_text1'] ?? '',
+                    'text2' => $de['intro_text2'] ?? '',
+                ],
+                'en' => [
+                    'title' => $en['intro_title'] ?? '',
+                    'text1' => $en['intro_text1'] ?? '',
+                    'text2' => $en['intro_text2'] ?? '',
+                ],
+            ], null],
         ];
+    }
+
+    private function sectionPair(array $fields, array $de, array $en): array
+    {
+        return [
+            'de' => array_map(fn ($path) => $this->pick($de, explode('.', $path)), $fields),
+            'en' => array_map(fn ($path) => $this->pick($en, explode('.', $path)), $fields),
+        ];
+    }
+
+    private function pick(array $source, array|string $path): string
+    {
+        $segments = is_string($path) ? explode('.', $path) : $path;
+        $value = $source;
+
+        foreach ($segments as $segment) {
+            if (! is_array($value) || ! array_key_exists($segment, $value)) {
+                return '';
+            }
+            $value = $value[$segment];
+        }
+
+        return is_string($value) ? $value : '';
     }
 }

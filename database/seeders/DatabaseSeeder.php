@@ -24,7 +24,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\MenuItem::factory(10)->create();
 
         $this->call([
-            SiteSettingsSeeder::class,
+            GlobalSettingsSeeder::class,
             PagesSeeder::class,
         ]);
     }

@@ -30,9 +30,8 @@
 <meta name="twitter:description" content="{{ $seo['description'] ?? '' }}">
 <meta name="twitter:image" content="{{ url($seo['og_image'] ?? '/logo.png') }}">
 
-@php($verification = \App\Models\Setting::value('seo', 'google_site_verification'))
-@if ($verification)
-    <meta name="google-site-verification" content="{{ $verification }}">
+@if (! empty($seo['google_site_verification']))
+    <meta name="google-site-verification" content="{{ $seo['google_site_verification'] }}">
 @endif
 
 @include('partials.jsonld-website')
