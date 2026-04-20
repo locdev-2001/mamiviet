@@ -72,3 +72,8 @@ Homestead.yaml
 
 # Misc
 mamiviet-api.zip
+
+# Lighthouse audit reports
+lighthouse-*.json
+lh-*.json
+lh-*.html
