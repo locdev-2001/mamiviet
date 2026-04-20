@@ -12,6 +12,13 @@ const NAV_KEYS = [
   { key: "kontakt", scroll: true, target: 'contact' },
 ];
 
+const LOCALE_PATH_MAP: Record<string, Record<string, string>> = {
+  '/': { en: '/en' },
+  '/bilder': { en: '/en/gallery' },
+  '/en': { de: '/' },
+  '/en/gallery': { de: '/bilder' },
+};
+
 export function Header({ scrollToRef }) {
   const [open, setOpen] = useState(false);
   const { t, i18n } = useTranslation();
@@ -26,6 +33,13 @@ export function Header({ scrollToRef }) {
     }
   };
 
+  const switchLocale = () => {
+    const next = i18n.language === 'de' ? 'en' : 'de';
+    const mapping = LOCALE_PATH_MAP[location.pathname];
+    const target = mapping?.[next] ?? (next === 'en' ? '/en' : '/');
+    window.location.assign(target);
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 text-white" style={{ backgroundColor: '#2f2721' }}>
       {/* Mobile header */}
@@ -36,7 +50,7 @@ export function Header({ scrollToRef }) {
         <div className="flex items-center space-x-4">
           <button
             className="text-white hover:text-primary border-white hover:border-primary px-3 py-1 rounded border transition text-sm font-semibold"
-            onClick={() => i18n.changeLanguage(i18n.language === 'de' ? 'en' : 'de')}
+            onClick={switchLocale}
             aria-label={t('header.lang_switch', 'Sprache wechseln')}
           >
             {i18n.language === 'de' ? 'DE' : 'EN'}
@@ -107,7 +121,7 @@ export function Header({ scrollToRef }) {
           <div className="flex items-center justify-end space-x-4">
             <button
               className="text-white hover:text-primary border-white hover:border-primary px-3 py-2 rounded border transition text-sm font-semibold uppercase tracking-wider"
-              onClick={() => i18n.changeLanguage(i18n.language === 'de' ? 'en' : 'de')}
+              onClick={switchLocale}
               aria-label={t('header.lang_switch', 'Sprache wechseln')}
             >
               {i18n.language === 'de' ? 'DE' : 'EN'}

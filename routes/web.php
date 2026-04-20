@@ -1,17 +1,14 @@
 <?php
 
+use App\Http\Controllers\PageController;
 use Illuminate\Support\Facades\Route;
 
-// SPA — serve built React app for the landing page.
-Route::get('/', function () {
-    $index = public_path('build/index.html');
-    abort_unless(file_exists($index), 404, 'Frontend build missing. Run: npm run build');
-    return response()->file($index);
-});
+Route::middleware('setlocale')->group(function () {
+    Route::get('/', [PageController::class, 'home'])->name('home');
+    Route::get('/bilder', [PageController::class, 'bilder'])->name('bilder');
 
-// SPA fallback — any non-admin, non-api route serves the React app.
-Route::fallback(function () {
-    $index = public_path('build/index.html');
-    abort_unless(file_exists($index), 404, 'Frontend build missing. Run: npm run build');
-    return response()->file($index);
+    Route::prefix('en')->group(function () {
+        Route::get('/', [PageController::class, 'home'])->name('home.en');
+        Route::get('/gallery', [PageController::class, 'bilder'])->name('bilder.en');
+    });
 });

@@ -1,29 +1,19 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
+import laravel from "laravel-vite-plugin";
 import path from "path";
-import { componentTagger } from "lovable-tagger";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
-  server: {
-    host: "::",
-    port: 8080,
-  },
-  base: mode === 'production' ? '/build/' : '/',
-  publicDir: mode === 'production' ? false : 'public',
-  build: {
-    outDir: 'public/build',
-    emptyOutDir: true,
-    manifest: true,
-  },
+export default defineConfig({
   plugins: [
+    laravel({
+      input: ["src/index.css", "src/styles/font.css", "src/styles/main.css", "src/main.tsx"],
+      refresh: true,
+    }),
     react(),
-    mode === 'development' &&
-    componentTagger(),
-  ].filter(Boolean),
+  ],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}));
+});

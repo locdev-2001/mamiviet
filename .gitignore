@@ -18,6 +18,12 @@ lerna-debug.log*
 /public/hot
 /public/storage
 
+# Filament published assets (re-published via filament:upgrade)
+/public/css/filament
+/public/js/filament
+/public/css/livewire
+/public/js/livewire
+
 # Env / secrets
 .env
 .env.backup
