@@ -44,7 +44,7 @@ export function Header({ scrollToRef }) {
       {/* Mobile header */}
       <div className="md:hidden flex items-center justify-between px-6 py-4">
         <Link to="/" className="flex items-center space-x-2 z-50">
-          <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} className="h-12 w-auto" />
+          <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} width="220" height="223" className="h-12 w-auto" />
         </Link>
         <div className="flex items-center space-x-4">
           <button
@@ -113,7 +113,7 @@ export function Header({ scrollToRef }) {
 
           <div className="flex items-center justify-center">
             <Link to="/" className="flex items-center space-x-3">
-              <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} className="h-14 w-auto" />
+              <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} width="220" height="223" className="h-14 w-auto" />
             </Link>
           </div>
 
@@ -151,7 +151,7 @@ export function Header({ scrollToRef }) {
           </button>
           <nav className="w-full max-w-xs bg-black/95 h-full p-8 pt-0 flex flex-col space-y-6">
             <div className="mb-8 mt-4 flex items-center space-x-2">
-              <img src="/logo.png" alt="Mamiviet logo" className="h-12 w-auto" />
+              <img src="/logo.png" alt="Mamiviet logo" width="220" height="223" className="h-12 w-auto" />
               <span className="text-lg font-bold tracking-widest">{t('header.logo_text', 'Mamiviet.')}</span>
             </div>
             {NAV_KEYS.map((item) => (
