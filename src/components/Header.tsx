@@ -3,7 +3,6 @@ import { X } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { GloriaFoodButton } from "@/components/GloriaFoodButton";
-import '../styles/fidalgo.css';
 
 const NAV_KEYS = [
   { key: "home", href: "/" },
