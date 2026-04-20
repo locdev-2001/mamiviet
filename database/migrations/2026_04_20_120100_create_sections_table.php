@@ -18,7 +18,7 @@ return new class extends Migration
             $table->json('body')->nullable();
             $table->json('cta_label')->nullable();
             $table->json('cta_link')->nullable();
-            $table->json('image_path')->nullable();
+            $table->string('image_path')->nullable();
             $table->json('data')->nullable();
             $table->timestamps();
             $table->index(['page_id', 'order']);
