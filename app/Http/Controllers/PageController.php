@@ -28,10 +28,34 @@ class PageController extends Controller
 
         $seo = $page?->getTranslation('seo', $locale) ?: [];
 
-        return view('app', [
+        $isHome = $slugDe === 'home';
+        $data = [
             'locale' => $locale,
             'seo' => $this->buildSeo($seo, $slugDe, $locale),
-        ]);
+            'isHome' => $isHome,
+        ];
+
+        if (! $isHome) {
+            $data['breadcrumb'] = $this->buildBreadcrumb($slugDe, $locale);
+        }
+
+        return view('app', $data);
+    }
+
+    private function buildBreadcrumb(string $slugDe, string $locale): array
+    {
+        $base = rtrim(config('app.url'), '/');
+        $home = $base . ($locale === 'en' ? '/en' : '/');
+        $homeName = $locale === 'en' ? 'Home' : 'Startseite';
+
+        $pageNames = [
+            'bilder' => ['de' => 'Bilder', 'en' => 'Gallery'],
+        ];
+
+        return [
+            ['name' => $homeName, 'url' => $home],
+            ['name' => $pageNames[$slugDe][$locale] ?? ucfirst($slugDe), 'url' => $base . request()->getPathInfo()],
+        ];
     }
 
     private function buildSeo(array $pageSeo, string $slugDe, string $locale): array

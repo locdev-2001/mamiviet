@@ -5,26 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ $seo['title'] }}</title>
-    <meta name="description" content="{{ $seo['description'] }}">
-    <link rel="canonical" href="{{ $seo['canonical'] }}">
-
-    @foreach ($seo['hreflang'] as $lang => $url)
-        <link rel="alternate" hreflang="{{ $lang }}" href="{{ $url }}">
-    @endforeach
-    <link rel="alternate" hreflang="x-default" href="{{ $seo['hreflang']['de'] }}">
-
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="{{ $seo['title'] }}">
-    <meta property="og:description" content="{{ $seo['description'] }}">
-    <meta property="og:url" content="{{ $seo['canonical'] }}">
-    <meta property="og:image" content="{{ url($seo['og_image']) }}">
-    <meta property="og:locale" content="{{ $locale === 'de' ? 'de_DE' : 'en_US' }}">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="{{ $seo['title'] }}">
-    <meta name="twitter:description" content="{{ $seo['description'] }}">
-    <meta name="twitter:image" content="{{ url($seo['og_image']) }}">
+    <x-seo :seo="$seo" :locale="$locale">
+        @if (($isHome ?? false))
+            @include('partials.jsonld-localbusiness')
+        @endif
+        @isset($breadcrumb)
+            @include('partials.jsonld-breadcrumb', ['breadcrumb' => $breadcrumb])
+        @endisset
+    </x-seo>
 
     <link rel="icon" type="image/png" href="/logo.png">
 
