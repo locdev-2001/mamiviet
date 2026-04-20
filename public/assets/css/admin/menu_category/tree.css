@@ -1,0 +1,382 @@
+/* Category Tree Styles */
+.tree-structure-container {
+    min-height: 300px;
+}
+
+.category-tree {
+    padding: 0;
+    margin: 0;
+}
+
+.category-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.category-list.root-level {
+    padding-left: 0;
+}
+
+.category-item {
+    margin: 0;
+    padding: 0;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    background: #fff;
+    transition: all 0.2s ease;
+}
+
+.category-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-color: #007bff;
+}
+
+.category-item.sortable-chosen {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: rotate(2deg);
+}
+
+.category-item.sortable-ghost {
+    opacity: 0.4;
+    background: #f8f9fa;
+}
+
+.category-content {
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    cursor: grab;
+    min-height: 60px;
+}
+
+.category-content:active {
+    cursor: grabbing;
+}
+
+.category-content .toggle-icon {
+    cursor: pointer !important;
+}
+
+.category-content .category-actions {
+    cursor: default !important;
+}
+
+.category-content .category-actions .btn {
+    cursor: pointer !important;
+}
+
+.category-toggle {
+    width: 30px;
+    text-align: center;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+
+.toggle-icon {
+    color: #6c757d;
+    cursor: pointer !important;
+    transition: all 0.2s ease;
+    padding: 6px;
+    border-radius: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    user-select: none;
+    z-index: 10;
+    position: relative;
+}
+
+.toggle-icon:hover {
+    color: #007bff !important;
+    background-color: #f8f9fa;
+    transform: scale(1.1);
+}
+
+.toggle-icon.fa-chevron-down {
+    transform: rotate(0deg);
+}
+
+.drag-handle {
+    color: #6c757d;
+    cursor: grab;
+}
+
+.drag-handle:hover {
+    color: #007bff;
+}
+
+.category-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    min-width: 0;
+}
+
+.category-image-container {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.category-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.category-image-placeholder {
+    color: #6c757d;
+    font-size: 16px;
+}
+
+.category-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.category-name {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.category-name strong {
+    color: #212529;
+    font-size: 14px;
+    margin-right: 8px;
+}
+
+.category-meta {
+    font-size: 12px;
+    color: #6c757d;
+    line-height: 1.3;
+}
+
+.category-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: 12px;
+    z-index: 10;
+    position: relative;
+}
+
+.category-actions .btn {
+    padding: 4px 8px;
+    font-size: 12px;
+    cursor: pointer !important;
+    user-select: none;
+}
+
+.category-actions .btn:hover {
+    transform: scale(1.05);
+}
+
+.category-children {
+    padding-left: 40px;
+    padding-bottom: 8px;
+    border-top: 1px solid #e9ecef;
+    background: #f8f9fa;
+    margin-top: 8px;
+    display: block; /* Show by default - expanded state */
+}
+
+.category-children .category-list {
+    margin-top: 8px;
+}
+
+.category-children .category-item {
+    background: #fff;
+    border-color: #dee2e6;
+}
+
+/* Dragging state */
+body.dragging {
+    cursor: grabbing;
+}
+
+body.dragging .category-content {
+    cursor: grabbing;
+}
+
+/* Drag indicators */
+.sortable-drag {
+    transform: rotate(5deg);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+/* Empty state */
+#emptyState {
+    padding: 60px 20px;
+}
+
+#emptyState .fa-tags {
+    opacity: 0.3;
+}
+
+/* Loading spinner */
+#loadingSpinner {
+    padding: 40px;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+}
+
+/* Responsive design */
+@media (min-width: 769px) {
+    /* Desktop specific styles */
+    .toggle-icon {
+        width: 28px;
+        height: 28px;
+        padding: 8px;
+        font-size: 14px;
+    }
+    
+    .category-toggle {
+        width: 35px;
+    }
+}
+
+@media (max-width: 768px) {
+    .category-content {
+        padding: 8px;
+        min-height: 50px;
+    }
+    
+    .category-image-container {
+        width: 32px;
+        height: 32px;
+        margin-right: 8px;
+    }
+    
+    .category-name strong {
+        font-size: 13px;
+    }
+    
+    .category-meta {
+        font-size: 11px;
+    }
+    
+    .category-actions .btn {
+        padding: 3px 6px;
+        font-size: 11px;
+    }
+    
+    .category-children {
+        padding-left: 20px;
+    }
+    
+    .toggle-icon {
+        width: 22px;
+        height: 22px;
+        padding: 4px;
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 576px) {
+    .category-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .category-image-container {
+        margin-bottom: 8px;
+        margin-right: 0;
+    }
+    
+    .category-details {
+        width: 100%;
+    }
+    
+    .category-actions {
+        margin-top: 8px;
+        margin-left: 0;
+    }
+}
+
+/* Animation improvements */
+.category-item {
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Badge styles */
+.badge {
+    font-size: 10px;
+    padding: 3px 6px;
+}
+
+.badge.bg-success {
+    background-color: #28a745 !important;
+}
+
+.badge.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+/* Expand/collapse toggle */
+.form-check-input:checked {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.form-check-label {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Card header */
+.card-header {
+    border-bottom: 1px solid #dee2e6;
+    background-color: #f8f9fa !important;
+}
+
+.card-header strong {
+    color: #495057;
+    font-size: 16px;
+}
+
+.card-header .text-primary {
+    color: #007bff !important;
+}
+
+/* Toast/Alert positioning */
+.alert.position-fixed {
+    animation: slideInRight 0.3s ease-out;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}

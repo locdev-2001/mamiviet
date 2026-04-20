@@ -1,0 +1,280 @@
+/* Reservation List View Styles */
+
+/* Status badges */
+.status-badge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+}
+
+.status-badge.status-pending {
+    background-color: #f59e0b;
+    color: white;
+}
+
+.status-badge.status-confirmed {
+    background-color: #10b981;
+    color: white;
+}
+
+.status-badge.status-cancelled {
+    background-color: #ef4444;
+    color: white;
+}
+
+.status-badge.status-completed {
+    background-color: #3b82f6;
+    color: white;
+}
+
+/* Table styling */
+.table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+.serial-number-column {
+    width: 80px;
+}
+
+/* Card view for mobile */
+.reservation-item-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reservation-item-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Filter form styling */
+.card-body .form-label {
+    font-weight: 600;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
+
+.form-select:focus,
+.form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Statistics cards hover effect */
+.card.bg-primary:hover,
+.card.bg-success:hover,
+.card.bg-warning:hover,
+.card.bg-info:hover {
+    transform: translateY(-2px);
+    transition: transform 0.2s ease;
+}
+
+/* Action buttons */
+.btn-group .btn {
+    margin: 0;
+}
+
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+/* Page title styling */
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+/* Empty state styling */
+.text-center.py-5 {
+    padding: 3rem 0;
+}
+
+.text-center.py-5 i {
+    opacity: 0.6;
+}
+
+/* Pagination styling */
+.pagination .page-link {
+    color: #6b7280;
+    border-color: #d1d5db;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #3b82f6;
+    border-color: #3b82f6;
+}
+
+.pagination .page-link:hover {
+    color: #3b82f6;
+    background-color: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+/* Modal styling */
+.modal-header {
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.modal-title {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* Form elements in modal */
+.modal-body .form-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+.modal-body .form-select,
+.modal-body .form-control {
+    border: 1px solid #d1d5db;
+}
+
+.modal-body .form-select:focus,
+.modal-body .form-control:focus {
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 0.2rem rgba(59, 130, 246, 0.25);
+}
+
+/* Badge styling for persons count */
+.badge.bg-secondary {
+    background-color: #6b7280 !important;
+    color: white;
+    font-weight: 500;
+}
+
+/* Filter section styling */
+.card.border-0.shadow-sm {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .btn-group {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .btn-group .btn {
+        width: 100%;
+    }
+
+    .reservation-item-card .card-body {
+        padding: 1rem;
+    }
+
+    .d-flex.gap-2 {
+        flex-direction: column;
+    }
+
+    .d-flex.gap-2 .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .card-body {
+        padding: 1rem;
+    }
+
+    .row.g-3 {
+        --bs-gutter-x: 1rem;
+    }
+
+    .col-md-3,
+    .col-md-2 {
+        margin-bottom: 1rem;
+    }
+}
+
+/* Enhanced visual styling */
+.card {
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.card:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.table-light {
+    background-color: #f8fafc;
+    color: #374151;
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+/* Loading state */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* Animation for status updates */
+@keyframes statusUpdate {
+    0% {
+        background-color: #dbeafe;
+    }
+    100% {
+        background-color: transparent;
+    }
+}
+
+.status-updated {
+    animation: statusUpdate 1s ease;
+}
+
+/* Hover effects for interactive elements */
+.btn:hover {
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transition: box-shadow 0.2s ease;
+}
+
+/* Focus states for accessibility */
+.btn:focus,
+.form-control:focus,
+.form-select:focus {
+    outline: 2px solid #3b82f6;
+    outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+    .btn,
+    .pagination,
+    .card-header,
+    .modal {
+        display: none !important;
+    }
+
+    .card {
+        border: 1px solid #000;
+        box-shadow: none;
+    }
+
+    .table {
+        border-collapse: collapse;
+    }
+
+    .table td,
+    .table th {
+        border: 1px solid #000;
+    }
+}

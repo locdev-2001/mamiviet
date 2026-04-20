@@ -1,0 +1,242 @@
+/* Blog Detail Page Styles */
+.page-title {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.75rem;
+}
+
+.card {
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+/* Blog Content Styling */
+.blog-title {
+    color: #2c3e50;
+    font-weight: 700;
+    margin-bottom: 0;
+    line-height: 1.3;
+}
+
+.blog-excerpt {
+    font-style: italic;
+    color: #6c757d;
+    border-left: 4px solid #007bff;
+    margin-left: 0;
+}
+
+.blog-content {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #495057;
+    min-height: 200px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+/* Form Labels */
+.form-label {
+    color: #495057;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.5rem;
+}
+
+/* Metadata Styling */
+.metadata-value {
+    margin-bottom: 0.5rem;
+}
+
+.badge {
+    font-size: 0.8rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 6px;
+}
+
+/* Action Buttons */
+.btn {
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #ffc107, #e0a800);
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #e0a800, #d39e00);
+    color: #fff;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c82333, #bd2130);
+}
+
+.btn-secondary {
+    background: linear-gradient(135deg, #6c757d, #545b62);
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(135deg, #545b62, #3d4349);
+}
+
+/* Sidebar Styling */
+.sticky-top {
+    position: sticky;
+    top: 2rem;
+}
+
+.card.bg-light {
+    background-color: #f8f9fa !important;
+    border: 1px solid #e9ecef;
+}
+
+.card-title {
+    color: #495057;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .sticky-top {
+        position: static;
+        top: auto;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .blog-title {
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.9rem;
+    }
+    
+    .blog-content {
+        max-height: 300px;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.25rem;
+    }
+    
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    .blog-title {
+        font-size: 1.25rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+    
+    .form-label {
+        font-size: 0.8rem;
+    }
+    
+    .blog-content {
+        font-size: 0.9rem;
+        max-height: 250px;
+    }
+}
+
+/* Animation for page load */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Better scrollbar for content */
+.blog-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.blog-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.blog-content::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.blog-content::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Focus states */
+.card:focus-within {
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15) !important;
+}
+
+/* Print styles */
+@media print {
+    .btn, .card.bg-light:last-child {
+        display: none !important;
+    }
+    
+    .blog-content {
+        max-height: none;
+        overflow: visible;
+    }
+    
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #dee2e6 !important;
+    }
+}

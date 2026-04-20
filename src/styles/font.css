@@ -1,0 +1,290 @@
+/* Google Fonts Utility Classes */
+
+/* Inter Font Classes */
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-inter-light {
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+}
+
+.font-inter-regular {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+}
+
+.font-inter-medium {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+}
+
+.font-inter-semibold {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+}
+
+.font-inter-bold {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+}
+
+.font-inter-black {
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+}
+
+/* Jost Font Classes */
+.font-jost {
+  font-family: 'Jost', sans-serif;
+}
+
+.font-jost-light {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+}
+
+.font-jost-regular {
+  font-family: 'Jost', sans-serif;
+  font-weight: 400;
+}
+
+.font-jost-medium {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+}
+
+.font-jost-semibold {
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+}
+
+.font-jost-bold {
+  font-family: 'Jost', sans-serif;
+  font-weight: 700;
+}
+
+.font-jost-black {
+  font-family: 'Jost', sans-serif;
+  font-weight: 900;
+}
+
+/* Mrs Saint Delafield Font Classes (Script/Decorative) */
+.font-delafield {
+  font-family: 'Mrs Saint Delafield', cursive;
+  font-weight: 400;
+}
+
+.font-delafield-lg {
+  font-family: 'Mrs Saint Delafield', cursive;
+  font-weight: 400;
+  font-size: 2rem;
+  line-height: 1.2;
+}
+
+.font-delafield-xl {
+  font-family: 'Mrs Saint Delafield', cursive;
+  font-weight: 400;
+  font-size: 3rem;
+  line-height: 1.1;
+}
+
+/* Roboto Font Classes */
+.font-roboto {
+  font-family: 'Roboto', sans-serif;
+}
+
+.font-roboto-thin {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 100;
+}
+
+.font-roboto-light {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+}
+
+.font-roboto-regular {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+.font-roboto-medium {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+}
+
+.font-roboto-bold {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+}
+
+.font-roboto-black {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 900;
+}
+
+/* Source Sans 3 Font Classes */
+.font-source {
+  font-family: 'Source Sans 3', sans-serif;
+}
+
+.font-source-extralight {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 200;
+}
+
+.font-source-light {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 300;
+}
+
+.font-source-regular {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 400;
+}
+
+.font-source-medium {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 500;
+}
+
+.font-source-semibold {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 600;
+}
+
+.font-source-bold {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 700;
+}
+
+.font-source-black {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 900;
+}
+
+/* Cormorant Font Classes */
+.font-cormorant {
+  font-family: 'Cormorant', serif;
+}
+
+.font-cormorant-light {
+  font-family: 'Cormorant', serif;
+  font-weight: 300;
+}
+
+.font-cormorant-regular {
+  font-family: 'Cormorant', serif;
+  font-weight: 400;
+}
+
+.font-cormorant-medium {
+  font-family: 'Cormorant', serif;
+  font-weight: 500;
+}
+
+.font-cormorant-semibold {
+  font-family: 'Cormorant', serif;
+  font-weight: 600;
+}
+
+.font-cormorant-bold {
+  font-family: 'Cormorant', serif;
+  font-weight: 700;
+}
+
+/* Combination Classes for Common Use Cases */
+
+/* Headers - using Jost for clean, modern look */
+.heading-primary {
+  font-family: 'Jost', sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.heading-secondary {
+  font-family: 'Jost', sans-serif;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.heading-tertiary {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+}
+
+/* Body text - using Inter for readability */
+.body-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  line-height: 1.6;
+}
+
+.body-text-large {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.body-text-small {
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+/* UI Elements - using Source Sans 3 for interface */
+.ui-text {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.025em;
+}
+
+.ui-button {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ui-label {
+  font-family: 'Source Sans 3', sans-serif;
+  font-weight: 500;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+}
+
+/* Decorative text - using Mrs Saint Delafield */
+.decorative-text {
+  font-family: 'Mrs Saint Delafield', cursive;
+  font-weight: 400;
+}
+
+.signature-text {
+  font-family: 'Mrs Saint Delafield', cursive;
+  font-weight: 400;
+  font-size: 1.5rem;
+}
+
+/* Navigation - clean and modern */
+.nav-text {
+  font-family: 'Jost', sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* Brand/Logo text */
+.brand-text {
+  font-family: 'Jost', sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+}
+
+.brand-script {
+  font-family: 'Mrs Saint Delafield', cursive;
+  font-weight: 400;
+}

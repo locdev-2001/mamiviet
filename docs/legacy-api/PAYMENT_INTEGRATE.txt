@@ -1,0 +1,57 @@
+Tôi cần tích hợp thanh toán Stripe và PayPal vào dự án Laravel nhà hàng đã có sẵn luồng đặt hàng và bảng orders. Implement trong 1 ngày với yêu cầu:
+
+CONTEXT:
+- Đã có model Order hãy tự phân tích
+
+- Cần tạo system quản lý payment gateways và process payments
+- Tất cả response phải luôn translation, mặc định là tiếng Đức, tham khảo middleware SetLocale, không được phép bỏ sót bản dịch nào
+DATABASE REQUIREMENTS:
+1. Migration: payment_gateways table
+   - id, name (stripe/paypal), is_active (boolean), config (JSON), timestamps
+   seeding sẵn các trường cấu hình vào config
+2. Migration: transactions table
+   - id, order_id, gateway, gateway_transaction_id, amount, currency, status (pending/completed/failed/refunded), timestamps
+3. Bổ sung payment_status và payment_method vào order với các trạng thái pending/completed/failed/refunded, mặc định là pending và các payment method bao gồm cash(mặc định), paypal, stripe
+
+Không dùng migration, viết sql cho tôi để tôi import thủ công
+
+BACKEND IMPLEMENTATION:
+1. PaymentGateway Model với relationships và scopes
+2. Transaction Model với Order relationship
+3. PaymentService với methods:
+   - createStripePaymentIntent($amount, $orderId, $currency = 'usd')
+   - createPayPalOrder($amount, $orderId, $currency = 'USD')
+   - handleStripeWebhook($payload, $signature)
+   - handlePayPalWebhook($payload, $headers)
+
+4. API Controllers:
+   PaymentController:
+   - GET /api/payment/gateways (return active gateways)
+   - POST /api/payment/stripe/create-intent (tạo Stripe PaymentIntent)
+   - POST /api/payment/paypal/create-order (tạo PayPal Order)
+   - POST /webhook/stripe (Stripe webhook handler)
+   - POST /webhook/paypal (PayPal webhook handler)
+5. Bổ sung trường payment_status và payment_method vào OrderResource,
+
+6. Sử dụng Enums trong Code đối với các trạng thái thanh toán và payment_method, viết các file Enums trong thư mục App\Enums
+
+TECHNICAL SPECS:
+- Packages: stripe/stripe-php, paypal/paypal-checkout-sdk
+- Environment variables: STRIPE_PUBLISHABLE_KEY, STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_MODE
+- Error handling: try-catch với proper HTTP status codes
+- Validation: amount > 0, valid currency, valid gateway
+- Security: verify webhook signatures
+- Logging: log all transactions và errors
+- Architect: Service pattern
+
+RESPONSE FORMATS:
+Success: {"status": "success", "data": {...}}
+Error: {"status": "error", "message": "...", "errors": {...}}
+
+WORKFLOW INTEGRATION:
+- Khi create order → save payment_method & payment_status pending
+- Khi payment success → update Order (payment_status = 'completed', payment_method)
+- Khi payment failed → update Order (payment_status = 'failed')
+- Store transaction record cho mọi payment attempt
+
+Tạo complete implementation với migrations, models, controllers, services, routes, và config files. Include artisan commands để setup và test API endpoints.

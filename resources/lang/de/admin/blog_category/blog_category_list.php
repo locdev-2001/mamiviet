@@ -1,0 +1,23 @@
+<?php
+return [
+    'page_title' => 'Blog-Kategorie Liste',
+    'blog_category_list' => 'Blog-Kategorie Liste',
+    'add_blog_category' => 'Neue Blog-Kategorie hinzufügen',
+    'serial_number' => 'Nr.',
+    'no_information' => 'Keine Informationen!',
+    'no_data' => 'Keine Daten verfügbar!',
+    'name' => 'Name',
+    'description' => 'Beschreibung',
+    'status' => 'Status',
+    'actions' => 'Aktionen',
+    'active' => 'Aktiv',
+    'inactive' => 'Inaktiv',
+    'update' => 'Aktualisieren',
+    'delete' => 'Löschen',
+    'confirm_delete' => 'Sind Sie sicher, dass Sie diese Kategorie löschen möchten?',
+    'first_page' => 'Erste',
+    'last_page' => 'Letzte',
+    'confirm_delete_item' => 'Sind Sie sicher, dass Sie diese Blog-Kategorie löschen möchten?',
+    'delete_success' => 'Blog-Kategorie und alle zugehörigen Daten erfolgreich gelöscht',
+    'delete_error' => 'Fehler beim Löschen der Blog-Kategorie und zugehöriger Daten',
+];

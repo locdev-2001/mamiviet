@@ -1,0 +1,22 @@
+<?php
+return [
+    'edit_mail_template' => 'E-Mail-Vorlage bearbeiten',
+    'back_to_list' => 'Zurück zur Liste',
+    'validation_error' => 'Validierungsfehler',
+    'code' => 'Vorlagencode',
+    'name' => 'Vorlagenname',
+    'description' => 'Beschreibung',
+    'content' => 'Vorlageninhalt',
+    'code_placeholder' => 'Vorlagencode eingeben (z.B. welcome_email)',
+    'name_placeholder' => 'Vorlagenname eingeben',
+    'description_placeholder' => 'Vorlagenbeschreibung eingeben',
+    'content_placeholder' => 'HTML-E-Mail-Vorlageninhalt hier eingeben...',
+    'help_code' => 'Eindeutiger Bezeichner für die Vorlage (Kleinbuchstaben, Unterstriche erlaubt)',
+    'help_name' => 'Anzeigename für die Vorlage',
+    'help_description' => 'Kurze Beschreibung, wofür diese Vorlage verwendet wird',
+    'help_content' => 'HTML-Inhalt der E-Mail-Vorlage. Sie können Variablen wie {{name}}, {{email}}, etc. verwenden.',
+    'cancel_button' => 'Abbrechen',
+    'update_button' => 'Vorlage aktualisieren',
+    'update_success' => 'E-Mail-Vorlage erfolgreich aktualisiert',
+    'update_error' => 'Fehler beim Aktualisieren der E-Mail-Vorlage. Bitte versuchen Sie es erneut.',
+];

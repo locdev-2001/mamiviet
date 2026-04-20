@@ -1,0 +1,21 @@
+<?php
+return [
+    'spin_configuration_list' => 'Spin Configuration List',
+    'spin_configuration_management' => 'Spin Configuration Management',
+    'add_configuration' => 'Add Configuration',
+    'serial_number' => 'No.',
+    'configuration_group' => 'Configuration Group',
+    'key' => 'Key',
+    'value' => 'Value',
+    'created_date' => 'Created Date',
+    'actions' => 'Actions',
+    'view_detail' => 'View Detail',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'no_information' => 'No information',
+    'no_value' => 'No value',
+    'no_configurations' => 'No configurations yet',
+    'confirm_delete' => 'Are you sure you want to delete this configuration?',
+    'first_page' => 'First',
+    'last_page' => 'Last',
+];

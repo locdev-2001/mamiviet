@@ -1,0 +1,20 @@
+<?php
+return [
+    'mail_template_list' => 'Mail Template List',
+    'code' => 'Code',
+    'name' => 'Name', 
+    'description' => 'Description',
+    'created_at' => 'Created At',
+    'add_new_mail_template' => 'Add New Mail Template',
+    'detail' => 'Detail',
+    'edit' => 'Edit',
+    'delete' => 'Delete',
+    'no_information' => 'No information!',
+    'no_data' => 'No mail templates available!',
+    'order_number' => 'No.',
+    'actions' => 'Actions',
+    'confirm_delete' => 'Are you sure you want to delete this mail template?',
+    'confirm_delete_with_name' => 'Are you sure you want to delete ":name"?',
+    'delete_success' => 'Mail template deleted successfully!',
+    'delete_error' => 'Error occurred while deleting mail template!',
+];

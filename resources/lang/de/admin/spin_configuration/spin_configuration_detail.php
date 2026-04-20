@@ -1,0 +1,20 @@
+<?php
+return [
+    'spin_configuration_detail' => 'Drehkonfiguration Details',
+    'back_to_list' => 'Zurück zur Liste',
+    'configuration_group' => 'Konfigurationsgruppe',
+    'configuration_key' => 'Konfigurationsschlüssel',
+    'configuration_value' => 'Konfigurationswert',
+    'configuration_actions' => 'Konfigurationsaktionen',
+    'edit_configuration' => 'Konfiguration bearbeiten',
+    'delete_configuration' => 'Konfiguration löschen',
+    'configuration_information' => 'Konfigurationsinformationen',
+    'id' => 'ID',
+    'group' => 'Gruppe',
+    'key' => 'Schlüssel',
+    'created_date' => 'Erstellungsdatum',
+    'last_updated' => 'Zuletzt aktualisiert',
+    'no_information' => 'Keine Informationen!',
+    'no_value' => 'Keine Informationen!',
+    'confirm_delete' => 'Sind Sie sicher, dass Sie die Konfiguration :key löschen möchten?',
+];

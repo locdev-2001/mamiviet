@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'assign_coupon_to_user' => 'Gutschein an Benutzer vergeben',
+    'coupon_information' => 'Gutschein-Informationen',
+    'coupon_name' => 'Gutschein-Name',
+    'coupon_code' => 'Gutschein-Code',
+    'coupon_type' => 'Gutschein-Typ',
+    'coupon_value' => 'Gutschein-Wert',
+    'max_uses' => 'Max. Verwendungen',
+    'single_user' => 'Einzelner Benutzer',
+    'multiple_users' => 'Mehrere Benutzer',
+    'select_user' => 'Benutzer auswählen',
+    'select_users' => 'Benutzer auswählen',
+    'assign_to_all_users' => 'An alle Benutzer vergeben',
+    'search_user' => 'Benutzer nach Name oder E-Mail suchen...',
+    'no_users_found' => 'Keine Benutzer gefunden',
+    'assign_button' => 'Vergeben',
+    'back_to_list' => 'Zurück zur Liste',
+    'assign_success' => 'Gutschein erfolgreich vergeben!',
+    'assign_error' => 'Fehler beim Vergeben des Gutscheins!',
+    'fixed' => 'Festbetrag',
+    'percentage' => 'Prozentsatz',
+    'no_information' => 'Keine Informationen',
+    'users_selected' => 'Benutzer ausgewählt',
+    'all_users_selected' => 'Alle Benutzer erhalten diesen Gutschein',
+];

@@ -1,0 +1,345 @@
+/* Dashboard Responsive Styles */
+
+/* Page Title Responsive */
+.responsive-title {
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--primary-color, #2c3e50);
+    margin-bottom: 2rem;
+}
+
+/* Welcome Card Responsive */
+.welcome-card {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.welcome-card-body {
+    padding: 3rem 2rem;
+}
+
+.welcome-icon {
+    font-size: 4rem;
+    transition: transform 0.3s ease;
+}
+
+.welcome-title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.welcome-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 0;
+}
+
+/* Management Cards Grid */
+.management-cards-grid {
+    margin-top: 2rem;
+}
+
+.management-card {
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.management-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+.management-card-body {
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 280px;
+}
+
+.icon-container {
+    margin-bottom: 1.5rem;
+}
+
+.management-icon {
+    font-size: 3rem;
+    transition: transform 0.3s ease;
+}
+
+.management-card:hover .management-icon {
+    transform: scale(1.1);
+}
+
+.management-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.management-description {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.management-btn {
+    border-width: 2px;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+.management-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* Tablet Styles (768px - 991px) */
+@media (max-width: 991.98px) and (min-width: 768px) {
+    .responsive-title {
+        font-size: 2.2rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .welcome-card-body {
+        padding: 2.5rem 1.5rem;
+    }
+    
+    .welcome-icon {
+        font-size: 3.5rem;
+    }
+    
+    .welcome-title {
+        font-size: 1.8rem;
+    }
+    
+    .management-card-body {
+        padding: 1.8rem 1.3rem;
+        min-height: 260px;
+    }
+    
+    .management-icon {
+        font-size: 2.8rem;
+    }
+    
+    .management-title {
+        font-size: 1.2rem;
+        min-height: 3.5rem;
+    }
+    
+    .management-description {
+        font-size: 0.9rem;
+    }
+}
+
+/* Mobile Styles (576px - 767px) */
+@media (max-width: 767.98px) and (min-width: 576px) {
+    .responsive-title {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+    
+    .welcome-card-body {
+        padding: 2rem 1.5rem;
+    }
+    
+    .welcome-icon {
+        font-size: 3rem;
+    }
+    
+    .welcome-title {
+        font-size: 1.6rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 1rem;
+    }
+    
+    .management-cards-grid {
+        margin-top: 1.5rem;
+    }
+    
+    .management-card-body {
+        padding: 1.5rem 1rem;
+        min-height: 240px;
+    }
+    
+    .management-icon {
+        font-size: 2.5rem;
+    }
+    
+    .management-title {
+        font-size: 1.1rem;
+        min-height: 4rem;
+        line-height: 1.3;
+    }
+    
+    .management-description {
+        font-size: 0.85rem;
+        margin-bottom: 1rem;
+    }
+    
+    .management-btn {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.85rem;
+    }
+}
+
+/* Small Mobile Styles (< 576px) */
+@media (max-width: 575.98px) {
+    .responsive-title {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .welcome-card-body {
+        padding: 1.5rem 1rem;
+    }
+    
+    .welcome-icon {
+        font-size: 2.5rem;
+    }
+    
+    .welcome-title {
+        font-size: 1.4rem;
+    }
+    
+    .welcome-subtitle {
+        font-size: 0.95rem;
+    }
+    
+    .management-cards-grid {
+        margin-top: 1rem;
+    }
+    
+    .management-card {
+        margin-bottom: 1rem;
+    }
+    
+    .management-card-body {
+        padding: 1.5rem 1rem;
+        min-height: 220px;
+    }
+    
+    .management-icon {
+        font-size: 2.2rem;
+    }
+    
+    .management-title {
+        font-size: 1rem;
+        min-height: 4.5rem;
+        line-height: 1.3;
+    }
+    
+    .management-description {
+        font-size: 0.8rem;
+        margin-bottom: 1rem;
+    }
+    
+    .management-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+    
+    .btn-text {
+        display: none;
+    }
+    
+    .management-btn i {
+        margin-right: 0 !important;
+    }
+}
+
+/* Extra Small Mobile (< 400px) */
+@media (max-width: 399.98px) {
+    .responsive-title {
+        font-size: 1.6rem;
+    }
+    
+    .welcome-card-body {
+        padding: 1.2rem 0.8rem;
+    }
+    
+    .welcome-icon {
+        font-size: 2.2rem;
+    }
+    
+    .welcome-title {
+        font-size: 1.3rem;
+    }
+    
+    .management-card-body {
+        padding: 1.2rem 0.8rem;
+        min-height: 200px;
+    }
+    
+    .management-icon {
+        font-size: 2rem;
+    }
+    
+    .management-title {
+        font-size: 0.95rem;
+        min-height: 5rem;
+    }
+    
+    .management-description {
+        font-size: 0.75rem;
+    }
+    
+    .management-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.75rem;
+    }
+}
+
+/* Smooth animations for all devices */
+.welcome-card:hover .welcome-icon {
+    transform: rotate(5deg) scale(1.05);
+}
+
+/* Focus states for accessibility */
+.management-btn:focus {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .management-card {
+        border: 2px solid #000;
+    }
+    
+    .management-btn {
+        border-width: 3px;
+    }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+    .management-card,
+    .management-icon,
+    .welcome-icon,
+    .management-btn {
+        transition: none !important;
+    }
+    
+    .management-card:hover {
+        transform: none !important;
+    }
+}

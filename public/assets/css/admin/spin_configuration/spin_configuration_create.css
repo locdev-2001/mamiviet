@@ -1,0 +1,513 @@
+/* Spin Configuration Create CSS - Responsive Design */
+
+/* Base Styles */
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2d3748;
+    line-height: 1.2;
+}
+
+.card {
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #cbd5e0;
+    padding: 0.75rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 0.2rem rgba(66, 153, 225, 0.25);
+}
+
+.form-control-lg {
+    padding: 1rem;
+    font-size: 1.1rem;
+}
+
+textarea.form-control {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    min-height: 44px; /* Touch-friendly minimum */
+}
+
+.btn-primary {
+    background-color: #4299e1;
+    border-color: #4299e1;
+}
+
+.btn-primary:hover {
+    background-color: #3182ce;
+    border-color: #3182ce;
+}
+
+.btn-secondary {
+    background-color: #718096;
+    border-color: #718096;
+}
+
+.btn-secondary:hover {
+    background-color: #4a5568;
+    border-color: #4a5568;
+}
+
+.btn-outline-secondary {
+    color: #718096;
+    border-color: #718096;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #718096;
+    border-color: #718096;
+}
+
+.form-text {
+    font-size: 0.875rem;
+    color: #718096;
+    margin-top: 0.25rem;
+}
+
+.text-danger {
+    color: #e53e3e !important;
+}
+
+.invalid-feedback {
+    font-size: 0.875rem;
+    color: #e53e3e;
+    margin-top: 0.25rem;
+}
+
+.is-invalid {
+    border-color: #e53e3e;
+}
+
+.alert {
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.alert-danger {
+    background-color: #fed7d7;
+    border-color: #feb2b2;
+    color: #742a2a;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 2rem;
+    z-index: 10;
+}
+
+/* Sidebar Styles */
+.sidebar-card {
+    background-color: #f7fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+}
+
+.sidebar-card .card-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin-bottom: 1rem;
+}
+
+.sidebar-card .form-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.sidebar-card p {
+    font-size: 0.85rem;
+    color: #718096;
+    line-height: 1.4;
+}
+
+/* Large Desktop (1200px+) */
+@media (min-width: 1200px) {
+    .container-fluid {
+        max-width: 1140px;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    .form-control-lg {
+        padding: 1.125rem;
+        font-size: 1.125rem;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+    
+    .sidebar-card {
+        padding: 1.5rem;
+    }
+}
+
+/* Desktop (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .page-title {
+        font-size: 1.875rem;
+    }
+    
+    .form-control-lg {
+        padding: 1rem;
+        font-size: 1.1rem;
+    }
+    
+    .card-body {
+        padding: 1.75rem;
+    }
+}
+
+/* Tablet Landscape (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .page-title {
+        font-size: 1.6rem;
+    }
+    
+    .form-control-lg {
+        padding: 0.875rem;
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 1.5rem;
+    }
+    
+    .sticky-top {
+        position: static;
+        margin-top: 2rem;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.95rem;
+    }
+}
+
+/* Tablet Portrait & Small Laptop (577px - 767px) */
+@media (min-width: 577px) and (max-width: 767px) {
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .page-title {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        text-align: center;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control-lg {
+        padding: 0.875rem;
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 1.25rem;
+    }
+    
+    .sticky-top {
+        position: static;
+        margin-top: 1.5rem;
+    }
+    
+    .sidebar-card {
+        margin-top: 1rem;
+    }
+    
+    /* Stack form actions vertically */
+    .d-flex.flex-sm-row {
+        flex-direction: column !important;
+        gap: 0.75rem;
+    }
+    
+    .order-0, .order-1, .order-sm-0, .order-sm-1 {
+        order: unset !important;
+    }
+}
+
+/* Mobile Large (481px - 576px) */
+@media (min-width: 481px) and (max-width: 576px) {
+    .container-fluid {
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+        align-items: stretch;
+    }
+    
+    .page-title {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        text-align: center;
+        line-height: 1.3;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.875rem 1rem;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control, .form-control-lg {
+        padding: 0.875rem;
+        font-size: 1rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .sticky-top {
+        position: static;
+        margin-top: 1rem;
+    }
+    
+    .form-label {
+        font-size: 0.95rem;
+    }
+    
+    .form-text {
+        font-size: 0.825rem;
+    }
+    
+    textarea.form-control {
+        min-height: 80px;
+    }
+}
+
+/* Mobile Medium (361px - 480px) */
+@media (min-width: 361px) and (max-width: 480px) {
+    .container-fluid {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+    
+    .page-title {
+        font-size: 1.3rem;
+        margin-bottom: 0.875rem;
+        text-align: center;
+        line-height: 1.3;
+    }
+    
+    .card {
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+    
+    .card-body {
+        padding: 0.875rem;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.875rem;
+        font-size: 0.95rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .form-control, .form-control-lg {
+        padding: 0.75rem;
+        font-size: 0.95rem;
+    }
+    
+    .form-label {
+        font-size: 0.9rem;
+    }
+    
+    .form-text {
+        font-size: 0.8rem;
+    }
+    
+    .sidebar-card {
+        margin-top: 1rem;
+        padding: 0.875rem;
+    }
+    
+    .sidebar-card .card-title {
+        font-size: 0.95rem;
+    }
+    
+    .sidebar-card p {
+        font-size: 0.8rem;
+    }
+    
+    textarea.form-control {
+        min-height: 70px;
+    }
+}
+
+/* Mobile Small (320px - 360px) */
+@media (max-width: 360px) {
+    .container-fluid {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+    
+    .page-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.75rem;
+        text-align: center;
+        line-height: 1.2;
+    }
+    
+    .card {
+        border-radius: 6px;
+        margin-bottom: 0.875rem;
+    }
+    
+    .card-body {
+        padding: 0.75rem;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        min-height: 42px;
+    }
+    
+    .form-control, .form-control-lg {
+        padding: 0.675rem;
+        font-size: 0.9rem;
+    }
+    
+    .form-label {
+        font-size: 0.85rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    .form-text {
+        font-size: 0.75rem;
+    }
+    
+    .sidebar-card {
+        margin-top: 0.875rem;
+        padding: 0.75rem;
+    }
+    
+    .sidebar-card .card-title {
+        font-size: 0.9rem;
+        margin-bottom: 0.75rem;
+    }
+    
+    .sidebar-card p {
+        font-size: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .alert {
+        padding: 0.75rem;
+        margin-bottom: 1rem;
+    }
+    
+    textarea.form-control {
+        min-height: 60px;
+    }
+    
+    .mb-3, .mb-lg-4 {
+        margin-bottom: 1rem !important;
+    }
+}
+
+/* Ultra Small Mobile (below 320px) */
+@media (max-width: 319px) {
+    .container-fluid {
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+    }
+    
+    .page-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+        text-align: center;
+        line-height: 1.2;
+    }
+    
+    .card-body {
+        padding: 0.5rem;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.675rem;
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+        min-height: 40px;
+    }
+    
+    .form-control, .form-control-lg {
+        padding: 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .form-label {
+        font-size: 0.8rem;
+        margin-bottom: 0.35rem;
+    }
+    
+    .form-text {
+        font-size: 0.7rem;
+    }
+    
+    .sidebar-card {
+        margin-top: 0.75rem;
+        padding: 0.5rem;
+    }
+    
+    .sidebar-card .card-title {
+        font-size: 0.85rem;
+        margin-bottom: 0.5rem;
+    }
+    
+    .sidebar-card p {
+        font-size: 0.7rem;
+        margin-bottom: 0.4rem;
+    }
+    
+    textarea.form-control {
+        min-height: 50px;
+    }
+    
+    .mb-3, .mb-lg-4 {
+        margin-bottom: 0.75rem !important;
+    }
+}

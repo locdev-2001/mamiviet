@@ -1,0 +1,355 @@
+/* Mail Template Edit Styles */
+
+.page-title {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.75rem;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1);
+    outline: 0;
+    background-color: #fff;
+}
+
+.form-control-lg {
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 10px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-label.fw-semibold {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.form-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.invalid-feedback {
+    font-size: 0.8rem;
+    color: #dc3545;
+    margin-top: 0.25rem;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 1rem 1.25rem;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert h6 {
+    color: #721c24;
+    font-weight: 600;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    border-color: #4e555b;
+    color: white;
+}
+
+/* Edit-specific styles */
+.btn-info {
+    background-color: #17a2b8;
+    border-color: #17a2b8;
+    color: white;
+}
+
+.btn-info:hover {
+    background-color: #138496;
+    border-color: #117a8b;
+    color: white;
+    box-shadow: 0 4px 12px rgba(23, 162, 184, 0.25);
+}
+
+/* Form Actions */
+.form-actions {
+    border-top: 1px solid #e9ecef;
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Large textarea for content with Summernote */
+#mailTemplateContent {
+    min-height: 300px;
+    resize: vertical;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Code input styling */
+#mailTemplateCode {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f8f9fa;
+}
+
+#mailTemplateCode:focus {
+    background-color: #fff;
+}
+
+/* Animation for form submission */
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Improved spacing */
+.mb-3.mb-lg-4 {
+    margin-bottom: 1.5rem;
+}
+
+/* Summernote editor styling for edit */
+.note-editor {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+}
+
+.note-editor.note-frame.is-invalid {
+    border-color: #dc3545;
+}
+
+.note-toolbar {
+    border-radius: 8px 8px 0 0;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.note-editing-area {
+    border-radius: 0 0 8px 8px;
+}
+
+/* Responsive Design */
+@media (max-width: 575.98px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .page-title i {
+        font-size: 1.25rem;
+    }
+
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    .form-control-lg {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    /* Summernote responsive adjustments */
+    .note-toolbar {
+        padding: 0.5rem;
+    }
+
+    .note-toolbar .note-btn {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+    }
+
+    /* Stack action buttons vertically on mobile */
+    .d-flex.flex-column.flex-sm-row .btn {
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+
+    .d-flex.flex-column.flex-sm-row .btn:last-child {
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .form-label {
+        font-size: 0.9rem;
+    }
+
+    .form-text {
+        font-size: 0.75rem;
+    }
+
+    /* Responsive form columns - stack on mobile */
+    .col-md-6 {
+        margin-bottom: 1rem;
+    }
+
+    /* Summernote toolbar adjustments for tablet */
+    .note-toolbar .note-btn-group {
+        margin-right: 0.25rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    /* Medium devices adjustments */
+    .mb-3.mb-lg-4 {
+        margin-bottom: 1.5rem;
+    }
+}
+
+@media (min-width: 992px) {
+    .mb-3.mb-lg-4 {
+        margin-bottom: 2rem;
+    }
+
+    /* Desktop-specific improvements */
+    .note-editor {
+        min-height: 350px;
+    }
+}
+
+/* Large devices and up */
+@media (min-width: 1200px) {
+    .container-fluid {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+
+    .card-body {
+        padding: 2rem;
+    }
+}
+
+/* Focus and interaction states */
+.form-control:focus,
+.note-editor:focus-within {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1);
+}
+
+/* Loading state for edit form */
+.btn-primary.loading {
+    position: relative;
+    color: transparent;
+}
+
+.btn-primary.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid #ffffff;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Edit form specific improvements */
+.edit-form-header {
+    border-bottom: 1px solid #e9ecef;
+    padding-bottom: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Success/Error states for edit */
+.form-control.is-valid {
+    border-color: #28a745;
+}
+
+.form-control.is-valid:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.1);
+}
+
+/* Custom scrollbar for sidebar - Fix cho mail template edit view */
+.sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 3px;
+    transition: background 0.3s ease;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+/* Firefox scrollbar styling */
+.sidebar {
+    scrollbar-color: rgb(42 38 38 / 61%) rgb(255 255 255);
+}

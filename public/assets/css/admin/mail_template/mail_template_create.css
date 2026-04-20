@@ -1,0 +1,258 @@
+/* Mail Template Create Styles */
+
+.page-title {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 1.75rem;
+}
+
+.card {
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    padding: 0.75rem;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.1);
+    outline: 0;
+}
+
+.form-control-lg {
+    padding: 1rem;
+    font-size: 1rem;
+    border-radius: 10px;
+}
+
+.form-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.5rem;
+}
+
+.form-label.fw-semibold {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.form-text {
+    font-size: 0.8rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.invalid-feedback {
+    font-size: 0.8rem;
+    color: #dc3545;
+    margin-top: 0.25rem;
+}
+
+.is-invalid {
+    border-color: #dc3545;
+}
+
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 1rem 1.25rem;
+}
+
+.alert-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.alert h6 {
+    color: #721c24;
+    font-weight: 600;
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 0.625rem 1.25rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.25);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background-color: #545b62;
+    border-color: #4e555b;
+    color: white;
+}
+
+/* Sidebar Styling */
+.sticky-top {
+    top: 2rem !important;
+}
+
+.bg-light {
+    background-color: #f8f9fa !important;
+}
+
+.card-title {
+    color: #495057;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Guidelines and Tips Lists */
+.small {
+    font-size: 0.85rem;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+ul.small.text-muted {
+    padding-left: 1rem;
+}
+
+ul.small.text-muted li {
+    margin-bottom: 0.25rem;
+    line-height: 1.4;
+}
+
+/* Form Actions */
+.form-actions {
+    border-top: 1px solid #e9ecef;
+    padding-top: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Responsive Design */
+@media (max-width: 575.98px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .page-title i {
+        font-size: 1.25rem;
+    }
+    
+    .btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .form-control-lg {
+        padding: 0.75rem;
+        font-size: 0.9rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .sticky-top {
+        position: relative !important;
+        top: 0 !important;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .form-label {
+        font-size: 0.9rem;
+    }
+    
+    .form-text {
+        font-size: 0.75rem;
+    }
+    
+    ul.small.text-muted {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .sticky-top {
+        margin-top: 2rem;
+    }
+    
+    .col-lg-4 .card {
+        margin-bottom: 0;
+    }
+}
+
+/* Large textarea for content */
+#mailTemplateContent {
+    min-height: 300px;
+    resize: vertical;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+/* Code input styling */
+#mailTemplateCode {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #f8f9fa;
+}
+
+/* Focus states */
+.form-control:focus {
+    background-color: #fff;
+}
+
+#mailTemplateCode:focus {
+    background-color: #fff;
+}
+
+/* Variable list styling */
+.available-variables li {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #e9ecef;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+    color: #6f42c1;
+}
+
+/* Animation for form submission */
+.btn-primary:active {
+    transform: translateY(0);
+}
+
+/* Improved spacing */
+.mb-3.mb-lg-4 {
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 992px) {
+    .mb-3.mb-lg-4 {
+        margin-bottom: 2rem;
+    }
+}

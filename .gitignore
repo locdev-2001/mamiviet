@@ -1,0 +1,68 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+/node_modules
+/vendor
+
+# Build output
+/dist
+/dist-ssr
+/public/build
+/public/hot
+/public/storage
+
+# Env / secrets
+.env
+.env.backup
+.env.production
+*.local
+auth.json
+Homestead.json
+Homestead.yaml
+
+# PHPUnit / Laravel cache
+/.phpunit.cache
+/.phpunit.result.cache
+/storage/*.key
+/storage/app/*
+!/storage/app/.gitignore
+!/storage/app/public/
+/storage/app/public/*
+!/storage/app/public/.gitignore
+/storage/framework/cache/*
+!/storage/framework/cache/.gitignore
+/storage/framework/sessions/*
+!/storage/framework/sessions/.gitignore
+/storage/framework/views/*
+!/storage/framework/views/.gitignore
+/storage/logs/*
+!/storage/logs/.gitignore
+/bootstrap/cache/*
+!/bootstrap/cache/.gitignore
+
+# AI tooling
+.claude/
+.cursor/
+
+# Editor / IDE
+.vscode/*
+!.vscode/extensions.json
+.idea
+.fleet
+.DS_Store
+**/.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Misc
+mamiviet-api.zip

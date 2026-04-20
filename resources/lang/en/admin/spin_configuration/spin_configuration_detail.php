@@ -1,0 +1,20 @@
+<?php
+return [
+    'spin_configuration_detail' => 'Spin Configuration Detail',
+    'back_to_list' => 'Back to List',
+    'configuration_group' => 'Configuration Group',
+    'configuration_key' => 'Configuration Key',
+    'configuration_value' => 'Configuration Value',
+    'configuration_actions' => 'Configuration Actions',
+    'edit_configuration' => 'Edit Configuration',
+    'delete_configuration' => 'Delete Configuration',
+    'configuration_information' => 'Configuration Information',
+    'id' => 'ID',
+    'group' => 'Group',
+    'key' => 'Key',
+    'created_date' => 'Created Date',
+    'last_updated' => 'Last Updated',
+    'no_information' => 'No information!',
+    'no_value' => 'No information!',
+    'confirm_delete' => 'Are you sure you want to delete configuration :key?',
+];

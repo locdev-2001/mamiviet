@@ -1,0 +1,23 @@
+<?php
+return [
+    'page_title' => 'Blog Category List',
+    'blog_category_list' => 'Blog Category List',
+    'add_blog_category' => 'Add New Blog Category',
+    'serial_number' => 'No.',
+    'no_information' => 'No information!',
+    'no_data' => 'No data available!',
+    'name' => 'Name',
+    'description' => 'Description',
+    'status' => 'Status',
+    'actions' => 'Actions',
+    'active' => 'Active',
+    'inactive' => 'Inactive',
+    'update' => 'Update',
+    'delete' => 'Delete',
+    'confirm_delete' => 'Are you sure you want to delete this category?',
+    'first_page' => 'First',
+    'last_page' => 'Last',
+    'confirm_delete_item' => 'Are you sure you want to delete this blog category?',
+    'delete_success' => 'Blog category and all related data deleted successfully',
+    'delete_error' => 'Error occurred while deleting blog category and related data',
+];

@@ -1,0 +1,20 @@
+<?php
+return [
+    'mail_template_list' => 'E-Mail-Vorlagenliste',
+    'code' => 'Code',
+    'name' => 'Name', 
+    'description' => 'Beschreibung',
+    'created_at' => 'Erstellt am',
+    'add_new_mail_template' => 'Neue E-Mail-Vorlage hinzufügen',
+    'detail' => 'Detail',
+    'edit' => 'Bearbeiten',
+    'delete' => 'Löschen',
+    'no_information' => 'Keine Informationen!',
+    'no_data' => 'Keine E-Mail-Vorlagen verfügbar!',
+    'order_number' => 'Nr.',
+    'actions' => 'Aktionen',
+    'confirm_delete' => 'Sind Sie sicher, dass Sie diese E-Mail-Vorlage löschen möchten?',
+    'confirm_delete_with_name' => 'Sind Sie sicher, dass Sie ":name" löschen möchten?',
+    'delete_success' => 'E-Mail-Vorlage erfolgreich gelöscht!',
+    'delete_error' => 'Fehler beim Löschen der E-Mail-Vorlage!',
+];

@@ -1,0 +1,21 @@
+<?php
+return [
+    'spin_configuration_list' => 'Drehkonfigurationsliste',
+    'spin_configuration_management' => 'Drehkonfiguration-Verwaltung',
+    'add_configuration' => 'Konfiguration hinzufügen',
+    'serial_number' => 'Nr.',
+    'configuration_group' => 'Konfigurationsgruppe',
+    'key' => 'Schlüssel',
+    'value' => 'Wert',
+    'created_date' => 'Erstellungsdatum',
+    'actions' => 'Aktionen',
+    'view_detail' => 'Details anzeigen',
+    'edit' => 'Bearbeiten',
+    'delete' => 'Löschen',
+    'no_information' => 'Keine Informationen',
+    'no_value' => 'Kein Wert',
+    'no_configurations' => 'Noch keine Konfigurationen',
+    'confirm_delete' => 'Sind Sie sicher, dass Sie diese Konfiguration löschen möchten?',
+    'first_page' => 'Erste',
+    'last_page' => 'Letzte',
+];

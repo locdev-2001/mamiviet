@@ -1,0 +1,246 @@
+/* Edit Coupon CSS - Responsive Design (Based on Coupon Create) */
+
+/* Base Styles */
+.page-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2d3748;
+    line-height: 1.2;
+}
+
+.card {
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+.form-label {
+    font-weight: 500;
+    color: #4a5568;
+    margin-bottom: 0.5rem;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #cbd5e0;
+    padding: 0.75rem;
+    transition: all 0.2s ease-in-out;
+}
+
+.form-control:focus {
+    border-color: #4299e1;
+    box-shadow: 0 0 0 0.2rem rgba(66, 153, 225, 0.25);
+}
+
+.btn {
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease-in-out;
+    min-height: 44px; /* Touch-friendly minimum */
+}
+
+.btn-warning {
+    background-color: #f6ad55;
+    border-color: #f6ad55;
+    color: #1a202c;
+}
+
+.btn-warning:hover {
+    background-color: #ed8936;
+    border-color: #ed8936;
+    color: #1a202c;
+}
+
+.btn-secondary {
+    background-color: #718096;
+    border-color: #718096;
+}
+
+.invalid-feedback {
+    display: block;
+}
+
+.input-group-text {
+    background-color: #f8fafc;
+    border-color: #cbd5e0;
+    border-radius: 8px 0 0 8px;
+}
+
+#updateCouponBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.loading-spinner {
+    width: 1em;
+    height: 1em;
+}
+
+/* Current Info Alert */
+.alert-info {
+    background-color: #ebf8ff;
+    border-color: #bee3f8;
+    color: #2b6cb0;
+    border-radius: 8px;
+}
+
+.alert-heading {
+    color: #2c5aa0;
+    font-weight: 600;
+}
+
+/* Settings Cards */
+.setting-card {
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0 !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.setting-card:hover {
+    border-color: #cbd5e0 !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-actions {
+    background-color: #f8fafc;
+    margin: 0 -1.5rem -1.5rem;
+    padding: 1rem 1.5rem;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+/* Mobile First - Extra Small devices (phones, 576px and down) */
+@media (max-width: 575.98px) {
+    .page-title {
+        font-size: 1.25rem;
+    }
+    
+    .card-body {
+        padding: 1rem;
+    }
+    
+    .form-control-lg {
+        font-size: 1rem;
+        padding: 0.75rem;
+    }
+    
+    .btn {
+        width: 100%;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .setting-card {
+        margin-bottom: 0.75rem;
+    }
+    
+    .form-actions {
+        margin: 0 -1rem -1rem;
+        padding: 1rem;
+    }
+    
+    /* Stack form actions vertically on mobile */
+    .form-actions .btn + .btn {
+        margin-top: 0.5rem;
+    }
+    
+    /* Current info alert responsive */
+    .alert .row .col-sm-6 {
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) and (max-width: 767.98px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+    
+    .btn {
+        min-width: 120px;
+    }
+    
+    .setting-card {
+        height: 100%;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .page-title {
+        font-size: 1.65rem;
+    }
+    
+    .card-body {
+        padding: 2rem;
+    }
+    
+    .form-actions {
+        margin: 0 -2rem -2rem;
+        padding: 1.5rem 2rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .settings-sidebar {
+        padding-left: 1rem;
+        border-left: 1px solid #e2e8f0;
+    }
+    
+    .setting-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .form-actions {
+        margin: 0 -2rem -2rem;
+        padding: 1.5rem 2rem;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .page-title {
+        font-size: 1.875rem;
+    }
+    
+    .card {
+        max-width: 1140px;
+        margin: 0 auto 1rem;
+    }
+}
+
+/* Touch Device Optimizations */
+@media (hover: none) and (pointer: coarse) {
+    .btn {
+        min-height: 48px; /* Larger touch targets */
+        font-size: 1rem;
+    }
+    
+    .form-control {
+        min-height: 48px;
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+}
+
+/* High DPI Display Support */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .card {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    .setting-card {
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+    .form-control,
+    .btn,
+    .setting-card {
+        transition: none;
+    }
+}

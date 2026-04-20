@@ -1,0 +1,22 @@
+<?php
+return [
+    'edit_mail_template' => 'Edit Mail Template',
+    'back_to_list' => 'Back to List',
+    'validation_error' => 'Validation Error',
+    'code' => 'Template Code',
+    'name' => 'Template Name',
+    'description' => 'Description',
+    'content' => 'Template Content',
+    'code_placeholder' => 'Enter template code (e.g., welcome_email)',
+    'name_placeholder' => 'Enter template name',
+    'description_placeholder' => 'Enter template description',
+    'content_placeholder' => 'Enter your HTML email template content here...',
+    'help_code' => 'Unique identifier for the template (lowercase, underscore allowed)',
+    'help_name' => 'Display name for the template',
+    'help_description' => 'Brief description of what this template is used for',
+    'help_content' => 'HTML content of the email template. You can use variables like {{name}}, {{email}}, etc.',
+    'cancel_button' => 'Cancel',
+    'update_button' => 'Update Template',
+    'update_success' => 'Mail template updated successfully',
+    'update_error' => 'Error updating mail template. Please try again.',
+];

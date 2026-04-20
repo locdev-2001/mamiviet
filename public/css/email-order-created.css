@@ -1,0 +1,51 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+}
+
+.email-container {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.header {
+    background: linear-gradient(135deg, #FF6B35, #F7931E);
+    color: white;
+    padding: 30px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.content {
+    padding: 40px;
+    font-size: 16px;
+}
+
+.content h5 {
+    font-size: 20px;
+}
+
+.footer {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #e9ecef;
+    color: #666;
+}
+
+@media (max-width: 576px) {
+    .email-container {
+        margin: 10px;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+    
+    .header {
+        font-size: 20px;
+        padding: 15px;
+    }
+}

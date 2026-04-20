@@ -1,0 +1,27 @@
+<?php
+
+return [
+    'assign_coupon_to_user' => 'Assign Coupon to User',
+    'coupon_information' => 'Coupon Information',
+    'coupon_name' => 'Coupon Name',
+    'coupon_code' => 'Coupon Code',
+    'coupon_type' => 'Coupon Type',
+    'coupon_value' => 'Coupon Value',
+    'max_uses' => 'Max Uses',
+    'single_user' => 'Single User',
+    'multiple_users' => 'Multiple Users',
+    'select_user' => 'Select User',
+    'select_users' => 'Select Users',
+    'assign_to_all_users' => 'Assign to All Users',
+    'search_user' => 'Search user by name or email...',
+    'no_users_found' => 'No users found',
+    'assign_button' => 'Assign',
+    'back_to_list' => 'Back to List',
+    'assign_success' => 'Coupon assigned successfully!',
+    'assign_error' => 'Error assigning coupon!',
+    'fixed' => 'Fixed',
+    'percentage' => 'Percentage',
+    'no_information' => 'No information',
+    'users_selected' => 'user(s) selected',
+    'all_users_selected' => 'All users will receive this coupon',
+];
