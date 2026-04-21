@@ -23,6 +23,8 @@ lerna-debug.log*
 /public/js/filament
 /public/css/livewire
 /public/js/livewire
+/public/css/awcodes
+/public/js/awcodes
 
 # Env / secrets
 .env
