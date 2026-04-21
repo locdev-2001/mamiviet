@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\PageController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
@@ -31,3 +32,7 @@ Route::middleware('setlocale')->group(function () {
         Route::get('/gallery', [PageController::class, 'bilder'])->name('bilder.en');
     });
 });
+
+Route::get('/blog/preview/{post}', [PostController::class, 'preview'])
+    ->middleware('signed')
+    ->name('blog.preview');
