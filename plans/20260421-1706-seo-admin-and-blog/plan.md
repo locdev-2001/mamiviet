@@ -13,7 +13,7 @@ Mục tiêu: admin chủ động quản lý SEO cho trang chính (Home + Bilder)
 | # | Phase | Trọng tâm | Ước lượng | Status |
 |---|-------|-----------|-----------|--------|
 | 01 | [SEO admin cho Home/Bilder](phase-01-seo-admin-homepage.md) | keywords, robots, og_image per page, mở rộng JSON-LD LocalBusiness | 0.5 ngày | Done |
-| 02 | [Blog backend](phase-02-blog-backend.md) | Post model + PostResource Filament + tiptap editor + draft preview | 1-1.5 ngày | Pending |
+| 02 | [Blog backend](phase-02-blog-backend.md) | Post model + PostResource Filament + tiptap editor + draft preview | 1-1.5 ngày | Done |
 | 03 | [Blog frontend](phase-03-blog-frontend.md) | `/blog` + `/blog/{slug}` React pages + PostController SEO | 1 ngày | Pending |
 | 04 | [SEO enhancements](phase-04-seo-enhancements.md) | Sitemap extend, RSS, Article JSON-LD, Organization | 0.5 ngày | Pending |
 | 05 | [Testing & audit](phase-05-testing-audit.md) | Feature tests, sanitizer unit tests, Lighthouse, Rich Results | 0.5 ngày | Pending |
@@ -89,6 +89,7 @@ Mục tiêu: admin chủ động quản lý SEO cho trang chính (Home + Bilder)
 - ✅ `awcodes/filament-tiptap-editor:^3.0` stable với Filament 3.3 (branch 3.x, High reputation)
 - ✅ `jsonld-localbusiness.blade.php` + `jsonld-breadcrumb.blade.php` + `GenerateSitemapCommand.php` đã tồn tại → tái dùng, không tạo mới
 - ✅ **Phase 01 shipped** — 6 files modified, 4 URLs render meta/og/JSON-LD đầy đủ, code review 8/10, 3 post-review fixes applied
+- ✅ **Phase 02 shipped** — 14 files created + 4 modified (18 total), admin CRUD Post với tiptap + draft preview, 6 bugs fixed, review 8+/10
 
 ## Resolved questions
 

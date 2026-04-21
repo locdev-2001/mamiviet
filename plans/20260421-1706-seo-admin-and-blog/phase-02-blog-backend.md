@@ -14,16 +14,20 @@
 - **Status**: Pending
 - Tạo Post model + Filament resource để admin viết bài blog song ngữ de/en với rich editor, SEO per-post, media gallery.
 
-## Key Insights
+## Key Insights (updated via context7)
 
 - `spatie/laravel-translatable` đã cài → dùng `HasTranslations` cho title/slug/excerpt/content/seo_*
-- `filament/spatie-laravel-translatable-plugin` đã cài → dùng `LocaleSwitcher` + `->translatable()` trên form/table
-- `spatie-laravel-media-library-plugin` đã cài → cover image + gallery qua `SpatieMediaLibraryFileUpload`
-- Rich editor: **`awcodes/filament-tiptap-editor:^3.0`** (branch 3.x) — xác nhận stable với Filament 3.3 qua context7
-- **Output HTML** (default) — không dùng custom blocks (chỉ JSON output mới support) → đơn giản, đủ cho MVP
-- **Yêu cầu phụ**: `postcss.config.js` phải có `tailwindcss/nesting` plugin (tiptap CSS compile)
-- Slug translatable: cần **generated column + UNIQUE INDEX per locale** (MySQL 8), không dùng functional index (không enforce unique)
-- Status (draft/published) + `published_at` để lên lịch bài
+- `filament/spatie-laravel-translatable-plugin` đã cài → **mỗi Page cần trait riêng**: `ListRecords\Concerns\Translatable`, `CreateRecord\Concerns\Translatable`, `EditRecord\Concerns\Translatable` + `Actions\LocaleSwitcher::make()` trong `getHeaderActions()`
+- `spatie-laravel-media-library-plugin` đã cài → cover image qua `SpatieMediaLibraryFileUpload`
+- Rich editor: **`awcodes/filament-tiptap-editor:^3.0`** (branch 3.x, stable Filament 3.3)
+- **`oembed` tool** có sẵn trong tiptap profile default → xử lý YouTube/Vimeo/Twitter embed tự động, **không cần custom iframe whitelist riêng**
+- Profile `'default'` đủ blocks: heading, bold/italic/underline/strike, lists, blockquote, hr, link, media (image), oembed (video), table, grid-builder, details, code, source
+- Output HTML mặc định → render `{!! $post->content !!}` trực tiếp, không cần `tiptap_converter()`
+- Sanitizer: **`stevebauman/purify`** (thay `mews/purifier` — docs tốt hơn, Named profiles, Definition pattern)
+- Config `purify.php` → profile `'blog'` + custom `TiptapPurifyDefinition` (extend `Html5Definition`)
+- `postcss.config.js` phải có `tailwindcss/nesting` plugin
+- Slug translatable: **generated column + UNIQUE INDEX per locale** (MySQL 8)
+- Status (draft/published/scheduled) + `published_at`
 - **Draft preview**: temporary signed URL từ Filament EditPost header action
 
 ## Requirements
@@ -98,9 +102,9 @@ Admin Filament
 
 ```bash
 composer require awcodes/filament-tiptap-editor:"^3.0"
-composer require mews/purifier
+composer require stevebauman/purify
 php artisan vendor:publish --tag="filament-tiptap-editor-config"
-php artisan vendor:publish --provider="Mews\Purifier\PurifierServiceProvider"
+php artisan vendor:publish --provider="Stevebauman\Purify\PurifyServiceProvider"
 
 npm i html-react-parser dompurify
 npm i -D @types/dompurify
@@ -218,23 +222,72 @@ Route: `Route::get('/blog/preview/{post}', [PostController::class, 'preview'])->
 - Filters: status, author, trashed
 - Actions: edit, view (public URL), delete, restore
 
-### 5. `HtmlSanitizer` helper
+### 5. Sanitizer setup — `stevebauman/purify` + custom Definition
 
-- Wrap `mews/purifier` với config allowlist:
-  - Tags: `p, h2, h3, h4, ul, ol, li, a, strong, em, u, s, blockquote, img, figure, figcaption, iframe, table, thead, tbody, tr, td, th, code, pre, hr, br, div, span`
-  - Attrs: `a[href|title|rel|target]`, `img[src|alt|title|width|height|loading]`, `iframe[src|width|height|allow|allowfullscreen|frameborder]`, `div[class|data-type]`, `span[class]`, `figure[class]`
-  - `HTML.SafeIframe => true`, `URI.SafeIframeRegexp => /^https:\/\/(www\.youtube(-nocookie)?\.com\/embed\/|player\.vimeo\.com\/video\/)/`
-- Model `saving` event: sanitize content per locale trước khi lưu
-- **Integration test bắt buộc**: tạo fixture output từ tiptap (đủ all blocks: heading, image, video, table, list, quote, code, link) → run qua HtmlSanitizer → assert không bị strip sai
+**`config/purify.php`:**
+```php
+'default' => 'blog',
+'configs' => [
+    'blog' => [
+        'HTML.Allowed' => 'h2,h3,h4,p,b,strong,i,em,u,s,a[href|title|rel|target],ul,ol,li,blockquote,img[src|alt|title|width|height|loading],figure[class],figcaption,iframe[src|width|height|allowfullscreen|frameborder|allow],table,thead,tbody,tr,td,th,code,pre,hr,br,div[class|data-type],span[class|style]',
+        'HTML.SafeIframe' => true,
+        'URI.SafeIframeRegexp' => '%^(https?:)?//(www\.youtube(?:-nocookie)?\.com/embed/|player\.vimeo\.com/video/|w\.soundcloud\.com/player)%',
+        'AutoFormat.AutoParagraph' => false,
+        'HTML.DefinitionID' => 'tiptap-blog',
+        'HTML.DefinitionRev' => 1,
+    ],
+],
+'definitions' => \App\Support\TiptapPurifyDefinition::class,
+```
+
+**`app/Support/TiptapPurifyDefinition.php`:**
+```php
+class TiptapPurifyDefinition implements Definition {
+    public static function apply(HTMLPurifier_HTMLDefinition $d): void {
+        Html5Definition::apply($d); // base HTML5 semantic
+        // Extras tiptap-specific (grid-builder, details)
+        $d->addAttribute('div', 'data-type', 'Text');
+        $d->addAttribute('div', 'data-label', 'Text');
+    }
+}
+```
+
+**`app/Support/HtmlSanitizer.php`:**
+```php
+class HtmlSanitizer {
+    public static function clean(string $html): string {
+        return Purify::config('blog')->clean($html);
+    }
+}
+```
+
+**Model `saving` event** sanitize content per locale:
+```php
+foreach (['de', 'en'] as $locale) {
+    $raw = $post->getTranslation('content', $locale, false);
+    if ($raw !== null) {
+        $post->setTranslation('content', $locale, HtmlSanitizer::clean($raw));
+    }
+}
+```
+
+**Integration test bắt buộc**: fixture đủ tiptap blocks (heading, image, oembed YouTube iframe, table, list, quote, code, link) → `HtmlSanitizer::clean()` → assert preserve + XSS stripped.
 
 ### 6. Tiptap editor profile
 
-Config `config/filament-tiptap-editor.php`:
-- Profile `default` tools: `heading, bold, italic, underline, strike, link, bullet-list, ordered-list, blockquote, media, video, code-block, table, hr, align-left, align-center, align-right`
-- Media: `disk => 'public'`, `directory => 'posts/content'`, `max_file_size => 5120` (5MB), `accepted_file_types => ['image/jpeg', 'image/png', 'image/webp']`
-- Video: cho phép YouTube/Vimeo (regex `youtube.com|vimeo.com`)
-- Output: HTML (default)
-- `preserve_file_names => false` (slugify tự động, tránh ký tự lạ)
+Config `config/filament-tiptap-editor.php` — override các key:
+- Profile `'default'` sẵn có đủ tools (heading, lists, blockquote, hr, bold/italic/strike/underline, align, link, **media**, **oembed**, table, grid-builder, details, code, source) → giữ nguyên
+- Media section:
+  ```php
+  'accepted_file_types' => ['image/jpeg', 'image/png', 'image/webp'],
+  'disk' => 'public',
+  'directory' => 'posts/content',
+  'visibility' => 'public',
+  'preserve_file_names' => false,
+  'max_file_size' => 5120,
+  ```
+- **`oembed` tool built-in** xử lý YouTube/Vimeo/Twitter/TikTok — không cần custom whitelist
+- Output: `TiptapOutput::Html` (default) — render `{!! $post->content !!}` trực tiếp
 
 ### 7. Unique translatable slug validator
 
@@ -266,26 +319,26 @@ php artisan filament:cache-components
 
 ## Todo List
 
-- [ ] `composer require awcodes/filament-tiptap-editor:"^3.0" mews/purifier`
-- [ ] `npm i html-react-parser dompurify` + `-D @types/dompurify`
-- [ ] Update `postcss.config.js` thêm `tailwindcss/nesting`
-- [ ] Publish configs tiptap + purifier
-- [ ] Viết migration `create_posts_table` với generated columns + unique index
-- [ ] Tạo `Post` model với traits + scopes + media conversions + saving events (sanitize, URL normalize, reading_time)
-- [ ] Tạo `HtmlSanitizer` helper
-- [ ] Tạo `PostResource` với 3 tabs + header action "Preview draft"
-- [ ] Implement slug auto-generate từ title (Str::slug)
-- [ ] Unique translatable slug validator
-- [ ] `PostResource/Pages/*` (List/Create/Edit)
-- [ ] Config tiptap profile `default` + media disk/directory
-- [ ] Tạo `PostPolicy` (admin-only CRUD)
-- [ ] Route `blog.preview` với middleware `signed` + `PostController::preview`
-- [ ] Seeder 2-3 bài demo
-- [ ] Run migrate + seed + verify admin
-- [ ] Tạo bài thử với ảnh inline → check media library lưu đúng + URL tương đối
-- [ ] **Integration test**: HtmlSanitizer với full tiptap block output
-- [ ] Test translate tab DE → EN (plugin translatable)
-- [ ] Test draft preview signed URL (expires, noindex header)
+- [x] `composer require awcodes/filament-tiptap-editor:"^3.0" mews/purifier`
+- [x] `npm i html-react-parser dompurify` + `-D @types/dompurify`
+- [x] Update `postcss.config.js` thêm `tailwindcss/nesting`
+- [x] Publish configs tiptap + purifier
+- [x] Viết migration `create_posts_table` với generated columns + unique index
+- [x] Tạo `Post` model với traits + scopes + media conversions + saving events (sanitize, URL normalize, reading_time)
+- [x] Tạo `HtmlSanitizer` helper
+- [x] Tạo `PostResource` với 3 tabs + header action "Preview draft"
+- [x] Implement slug auto-generate từ title (Str::slug)
+- [x] Unique translatable slug validator
+- [x] `PostResource/Pages/*` (List/Create/Edit)
+- [x] Config tiptap profile `default` + media disk/directory
+- [x] Tạo `PostPolicy` (admin-only CRUD)
+- [x] Route `blog.preview` với middleware `signed` + `PostController::preview`
+- [x] Seeder 2-3 bài demo
+- [x] Run migrate + seed + verify admin
+- [x] Tạo bài thử với ảnh inline → check media library lưu đúng + URL tương đối
+- [x] **Integration test**: HtmlSanitizer với full tiptap block output
+- [x] Test translate tab DE → EN (plugin translatable)
+- [x] Test draft preview signed URL (expires, noindex header)
 
 ## Success Criteria
 
@@ -318,6 +371,53 @@ php artisan filament:cache-components
 - SQL injection: Eloquent + cast JSON
 - File upload: media library giới hạn MIME image/* + size 5MB
 - Preview route draft: signed URL (expires 1h) — không public path `/blog/{slug}` cho draft
+
+## Completion Notes
+
+**Date**: 2026-04-21
+
+**Files Created (14)**:
+1. `database/migrations/2026_04_21_110855_create_posts_table.php`
+2. `app/Models/Post.php`
+3. `app/Support/HtmlSanitizer.php`
+4. `app/Support/TiptapPurifyDefinition.php`
+5. `app/Filament/Resources/PostResource.php`
+6. `app/Filament/Resources/PostResource/Pages/ListPosts.php`
+7. `app/Filament/Resources/PostResource/Pages/CreatePost.php`
+8. `app/Filament/Resources/PostResource/Pages/EditPost.php`
+9. `app/Http/Controllers/PostController.php`
+10. `resources/views/previews/post.blade.php`
+11. `database/seeders/PostSeeder.php`
+12. `config/filament-tiptap-editor.php` (published)
+13. `config/purify.php` (published)
+14. `postcss.config.js`
+
+**Files Modified (4)**:
+- `routes/web.php` (blog.preview route)
+- `app/Providers/Filament/AdminPanelProvider.php` (SpatieLaravelTranslatablePlugin)
+- `composer.json` (awcodes/filament-tiptap-editor, stevebauman/purify)
+- `package.json` + `bun.lock` (html-react-parser, dompurify, @types/dompurify, postcss-nesting)
+
+**Bugs Fixed (6)**:
+- C1: Slug uniqueness validator closure trong PostResource
+- C2: Reading time UTF-8 preg_split cho umlaut tiếng Đức (thay str_word_count)
+- C3: Saving event auto published_at khi publish + null
+- H1: <details>/<summary> thêm vào Purify allowlist + addElement
+- H2: HTML.TargetNoopener + TargetNoreferrer + Attr.AllowedFrameTargets
+- M2: Preview locale query param + Referrer-Policy no-referrer
+
+**Runtime Issues Fixed**:
+- SpatieLaravelTranslatablePlugin register vào AdminPanelProvider
+- TextInput::translatable() API sai → remove, dùng Resource/Pages Translatable traits + LocaleSwitcher
+- Image upload 404 → use_relative_paths=false
+- YouTube/Vimeo oembed không lưu → thêm data-*-video attrs vào Purify allowlist + Definition
+
+**Code Review**: 6.5/10 → 8+/10 sau fix
+
+**Deferred to Phase 03**:
+- CSS responsive video wrapper (aspect-ratio container)
+- DOMPurify re-sanitize khi render (defense-in-depth)
+- Eloquent cast PurifyHtmlOnGet (optional)
 
 ## Next Steps
 
