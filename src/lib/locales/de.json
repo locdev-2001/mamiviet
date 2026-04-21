@@ -16,6 +16,7 @@
     "references": "Referenzen & Partner",
     "newsletter": "Newsletter",
     "bilder": "Bilder",
+    "blog": "Blog",
     "kontakt": "Kontakt",
     "logo_alt": "Mamiviet Logo",
     "logo_text": "Mamiviet.",
@@ -436,5 +437,26 @@
     "hours_fri_sat": "Mon. - Son.: 11:00 - 14:00 & 17:00 - 22:00",
     "company_name": "MAMI VIET",
     "all_rights_reserved": "ALLE RECHTE VORBEHALTEN"
+  },
+  "blog": {
+    "title": "Blog",
+    "tagline": "Geschichten, Rezepte und Neuigkeiten",
+    "read_more": "Weiterlesen",
+    "reading_time": "{{minutes}} Min. Lesezeit",
+    "published_on": "Veröffentlicht am",
+    "by_author": "von {{author}}",
+    "related_posts": "Ähnliche Beiträge",
+    "back_to_list": "Zurück zur Übersicht",
+    "empty": "Noch keine Beiträge veröffentlicht.",
+    "pagination": {
+      "previous": "Vorherige",
+      "next": "Nächste",
+      "page": "Seite {{current}} von {{total}}"
+    },
+    "not_found": {
+      "title": "Beitrag nicht gefunden",
+      "message": "Der gesuchte Beitrag existiert nicht oder wurde entfernt.",
+      "cta": "Zurück zum Blog"
+    }
   }
 } 

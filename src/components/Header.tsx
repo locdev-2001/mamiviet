@@ -5,18 +5,26 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-const NAV_ITEMS = [
+type NavItem =
+  | { key: string; href: string }
+  | { key: string; localePaths: Record<string, string> }
+  | { key: string; scroll: true; target: string };
+
+const NAV_ITEMS: readonly NavItem[] = [
   { key: 'home', href: '/' },
   { key: 'menu', href: '/menu' },
   { key: 'bilder', href: '/bilder' },
+  { key: 'blog', localePaths: { de: '/blog', en: '/en/blog' } },
   { key: 'kontakt', scroll: true, target: 'contact' },
 ] as const;
 
 const LOCALE_PATH_MAP: Record<string, Record<string, string>> = {
   '/': { en: '/en' },
   '/bilder': { en: '/en/gallery' },
+  '/blog': { en: '/en/blog' },
   '/en': { de: '/' },
   '/en/gallery': { de: '/bilder' },
+  '/en/blog': { de: '/blog' },
 };
 
 export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void } = {}) {
@@ -32,12 +40,14 @@ export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void
   const navHome = useSetting('header.nav.home', t('header.home'));
   const navMenu = useSetting('header.nav.menu', t('header.menu'));
   const navBilder = useSetting('header.nav.bilder', t('header.bilder'));
+  const navBlog = useSetting('header.nav.blog', t('header.blog', 'Blog'));
   const navKontakt = useSetting('header.nav.kontakt', t('header.kontakt'));
 
   const navLabels: Record<string, string> = {
     home: navHome,
     menu: navMenu,
     bilder: navBilder,
+    blog: navBlog,
     kontakt: navKontakt,
   };
   const navLabel = (key: string) => navLabels[key] ?? key;
@@ -57,11 +67,17 @@ export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void
     window.location.assign(target);
   };
 
+  const hrefForItem = (item: NavItem): string => {
+    if ('href' in item) return item.href;
+    if ('localePaths' in item) return item.localePaths[i18n.language] ?? item.localePaths.de;
+    return '#';
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full z-50 text-white" style={{ backgroundColor: '#2f2721' }}>
       {/* Mobile header */}
       <div className="md:hidden flex items-center justify-between px-6 py-4">
-        <Link to="/" className="flex items-center space-x-2 z-50">
+        <Link to="/" reloadDocument className="flex items-center space-x-2 z-50">
           <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} width={220} height={223} className="h-12 w-auto" />
         </Link>
         <div className="flex items-center space-x-4">
@@ -127,7 +143,8 @@ export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void
               return (
                 <Link
                   key={item.key}
-                  to={item.href!}
+                  to={hrefForItem(item)}
+                  reloadDocument
                   className="text-white hover:text-primary transition-colors text-sm font-medium px-3 py-2 rounded uppercase tracking-wider whitespace-nowrap"
                 >
                   {label}
@@ -137,7 +154,7 @@ export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void
           </nav>
 
           <div className="flex items-center justify-center">
-            <Link to="/" className="flex items-center space-x-3">
+            <Link to="/" reloadDocument className="flex items-center space-x-3">
               <img src="/logo.png" alt={t('header.logo_alt', 'Mamiviet logo')} width={220} height={223} className="h-14 w-auto" />
             </Link>
           </div>
@@ -208,7 +225,8 @@ export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void
               return (
                 <Link
                   key={item.key}
-                  to={item.href!}
+                  to={hrefForItem(item)}
+                  reloadDocument
                   className="block py-2 text-lg font-medium text-white hover:text-primary transition-colors"
                   onClick={() => setOpen(false)}
                 >
