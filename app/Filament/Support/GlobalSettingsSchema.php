@@ -39,6 +39,7 @@ class GlobalSettingsSchema
                     'header.nav.home' => ['label' => 'Home label', 'type' => 'text', 'translatable' => true],
                     'header.nav.menu' => ['label' => 'Menu label', 'type' => 'text', 'translatable' => true],
                     'header.nav.bilder' => ['label' => 'Bilder label', 'type' => 'text', 'translatable' => true],
+                    'header.nav.blog' => ['label' => 'Blog label', 'type' => 'text', 'translatable' => true],
                     'header.nav.kontakt' => ['label' => 'Kontakt label', 'type' => 'text', 'translatable' => true],
                 ],
             ],

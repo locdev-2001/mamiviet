@@ -22,6 +22,7 @@ class GlobalSettingsSeeder extends Seeder
             'header.nav.home' => $this->pair($de, $en, 'header.home'),
             'header.nav.menu' => $this->pair($de, $en, 'header.menu'),
             'header.nav.bilder' => $this->pair($de, $en, 'header.bilder'),
+            'header.nav.blog' => $this->pair($de, $en, 'header.blog'),
             'header.nav.kontakt' => $this->pair($de, $en, 'header.kontakt'),
 
             // Footer headings
