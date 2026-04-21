@@ -18,6 +18,9 @@ lerna-debug.log*
 /public/hot
 /public/storage
 
+# Generated at runtime by sitemap:generate (scheduled daily + observer-triggered)
+/public/sitemap.xml
+
 # Filament published assets (re-published via filament:upgrade)
 /public/css/filament
 /public/js/filament
