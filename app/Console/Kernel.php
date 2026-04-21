@@ -12,7 +12,8 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        $schedule->command('sitemap:generate')->weekly();
+        // Daily regenerate picks up scheduled posts auto-publishing.
+        $schedule->command('sitemap:generate')->daily();
     }
 
     /**
