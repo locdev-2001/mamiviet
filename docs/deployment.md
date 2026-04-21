@@ -159,7 +159,8 @@ server {
     include /www/server/panel/vhost/nginx/well-known/restaurant-mamiviet.com.conf;
     #CERT-APPLY-CHECK--END
 
-    #SSL-START
+    #SSL-START SSL related configuration, do NOT delete or modify the next line of commented-out 404 rules
+    #error_page 404/404.html;
     ssl_certificate    /www/server/panel/vhost/cert/restaurant-mamiviet.com/fullchain.pem;
     ssl_certificate_key    /www/server/panel/vhost/cert/restaurant-mamiviet.com/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
@@ -231,9 +232,9 @@ Install + config Supervisor để chạy queue:
 apt install -y supervisor
 
 cat > /etc/supervisor/conf.d/mamiviet-queue.conf <<'EOF'
-[program:mamiviet-queue]
+[program:mamiviet-queue-default]
 process_name=%(program_name)s_%(process_num)02d
-command=php /www/wwwroot/restaurant-mamiviet.com/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+command=php /www/wwwroot/restaurant-mamiviet.com/artisan queue:work --queue=default --sleep=3 --tries=3 --max-time=3600
 autostart=true
 autorestart=true
 stopasgroup=true
@@ -241,15 +242,34 @@ killasgroup=true
 user=www
 numprocs=1
 redirect_stderr=true
-stdout_logfile=/www/wwwroot/restaurant-mamiviet.com/storage/logs/queue.log
+stdout_logfile=/www/wwwroot/restaurant-mamiviet.com/storage/logs/queue-default.log
+stopwaitsecs=3600
+
+[program:mamiviet-queue-instagram]
+process_name=%(program_name)s_%(process_num)02d
+command=php /www/wwwroot/restaurant-mamiviet.com/artisan queue:work --queue=instagram-scraping --sleep=5 --tries=3 --timeout=600 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www
+numprocs=1
+redirect_stderr=true
+stdout_logfile=/www/wwwroot/restaurant-mamiviet.com/storage/logs/queue-instagram.log
 stopwaitsecs=3600
 EOF
 
 supervisorctl reread
 supervisorctl update
-supervisorctl start mamiviet-queue:*
+supervisorctl start mamiviet-queue-default:* mamiviet-queue-instagram:*
 supervisorctl status
 ```
+
+**Tách 2 worker lý do:**
+- `default` queue: `RegenerateSitemap` — critical, nhanh (< 1s)
+- `instagram-scraping` queue: IG scrape Apify — slow (30s-3min/call), có retry timeout 120/180/240s
+
+Nếu gộp chung → IG scrape block sitemap regen. Tách → sitemap luôn update ngay khi admin publish post.
 
 ### 1.10 Scheduler cron
 
