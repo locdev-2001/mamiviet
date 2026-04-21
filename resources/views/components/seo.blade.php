@@ -45,5 +45,9 @@
 @endif
 
 @include('partials.jsonld-website')
+@include('partials.jsonld-organization')
+
+<link rel="alternate" type="application/rss+xml" title="Mamiviet Blog (DE)" href="{{ url('/blog/feed.xml') }}">
+<link rel="alternate" type="application/rss+xml" title="Mamiviet Blog (EN)" href="{{ url('/en/blog/feed.xml') }}">
 
 {{ $slot }}
