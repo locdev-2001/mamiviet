@@ -64,12 +64,27 @@ class GlobalSettingsSeeder extends Seeder
                 'de' => 'Eindrücke aus dem Restaurant Mamiviet — Gerichte, Atmosphäre, Momente.',
                 'en' => 'Impressions from Restaurant Mamiviet — dishes, atmosphere, moments.',
             ],
+            'seo.home.keywords' => [
+                'de' => 'vietnamesisches restaurant, leipzig, pho, sushi, asiatische küche',
+                'en' => 'vietnamese restaurant, leipzig, pho, sushi, asian cuisine',
+            ],
+            'seo.bilder.keywords' => [
+                'de' => 'bilder, galerie, mamiviet, leipzig, restaurant',
+                'en' => 'gallery, images, mamiviet, leipzig, restaurant',
+            ],
+            'seo.home.robots' => 'index, follow',
+            'seo.bilder.robots' => 'index, follow',
+            'seo.home.og_image' => null,
+            'seo.bilder.og_image' => null,
             'seo.og_image' => null,
             'seo.google_site_verification' => null,
         ];
 
         foreach ($map as $key => $value) {
-            Setting::set($key, $this->normalize($value));
+            Setting::firstOrCreate(
+                ['key' => $key],
+                ['value' => $this->normalize($value)]
+            );
         }
     }
 

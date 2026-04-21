@@ -56,7 +56,13 @@
             'latitude' => 51.337725,
             'longitude' => 12.327329,
         ],
-        'image' => $url . '/logo.png',
+        'image' => (function () use ($url) {
+            $img = Setting::raw('seo.home.og_image') ?: Setting::raw('seo.og_image');
+            if (! $img) return $url . '/logo.png';
+            if (str_starts_with($img, 'http')) return $img;
+            if (str_starts_with($img, '/')) return $url . $img;
+            return $url . '/storage/' . ltrim($img, '/');
+        })(),
         'sameAs' => $sameAs ?: null,
         'openingHoursSpecification' => $openingHours ?: null,
     ], fn ($v) => $v !== null);

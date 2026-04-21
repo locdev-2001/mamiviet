@@ -98,9 +98,14 @@ class PageController extends Controller
         $pageKey = $slugDe === 'bilder' ? 'bilder' : 'home';
         $fallback = $defaults[$locale] ?? $defaults['de'];
 
-        $title = Setting::get("seo.{$pageKey}.title", $locale) ?: $fallback['title'];
-        $description = Setting::get("seo.{$pageKey}.description", $locale) ?: $fallback['description'];
-        $ogImage = Setting::get('seo.og_image') ?: '/logo.png';
+        $title = (string) (Setting::get("seo.{$pageKey}.title", $locale) ?: $fallback['title']);
+        $description = (string) (Setting::get("seo.{$pageKey}.description", $locale) ?: $fallback['description']);
+        $keywords = (string) (Setting::get("seo.{$pageKey}.keywords", $locale) ?: '');
+        $robotsRaw = Setting::raw("seo.{$pageKey}.robots");
+        $robots = is_string($robotsRaw) && $robotsRaw !== '' ? $robotsRaw : 'index, follow';
+
+        $ogRaw = Setting::raw("seo.{$pageKey}.og_image") ?: Setting::raw('seo.og_image');
+        $ogImage = is_string($ogRaw) && $ogRaw !== '' ? $ogRaw : '/logo.png';
 
         $pathMap = [
             'home' => ['de' => '/', 'en' => '/en'],
@@ -113,6 +118,8 @@ class PageController extends Controller
         return [
             'title' => $title,
             'description' => $description,
+            'keywords' => $keywords,
+            'robots' => $robots,
             'canonical' => $base . $paths[$locale],
             'hreflang' => [
                 'de' => $base . $paths['de'],
@@ -123,9 +130,9 @@ class PageController extends Controller
         ];
     }
 
-    private function safeUrl(?string $url): ?string
+    private function safeUrl(mixed $url): ?string
     {
-        if (! $url) {
+        if (! is_string($url) || $url === '') {
             return null;
         }
         if (str_starts_with($url, '/')) {

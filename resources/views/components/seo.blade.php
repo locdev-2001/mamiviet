@@ -2,6 +2,10 @@
 
 <title>{{ $seo['title'] ?? config('app.name') }}</title>
 <meta name="description" content="{{ $seo['description'] ?? '' }}">
+@if (! empty($seo['keywords']))
+    <meta name="keywords" content="{{ $seo['keywords'] }}">
+@endif
+<meta name="robots" content="{{ $seo['robots'] ?? 'index, follow' }}">
 <link rel="canonical" href="{{ $seo['canonical'] ?? url()->current() }}">
 
 @foreach (($seo['hreflang'] ?? []) as $lang => $href)

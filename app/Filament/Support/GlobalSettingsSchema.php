@@ -9,14 +9,23 @@ namespace App\Filament\Support;
  *
  * Definition keys:
  *  - label: human label
- *  - type: text | textarea | url | image
+ *  - type: text | textarea | url | image | select
  *  - translatable: bool (stores {de, en} map)
  *  - rules?: array of Laravel validation rules
  *  - placeholder?: string
  *  - required?: bool
+ *  - options?: array (for type=select, [value => label])
+ *  - default?: mixed (default when value is empty)
+ *  - helperText?: string
  */
 class GlobalSettingsSchema
 {
+    public const ROBOTS_OPTIONS = [
+        'index, follow' => 'Index + Follow (default — allow Google to index)',
+        'noindex, follow' => 'Noindex + Follow (hide from results, follow links)',
+        'noindex, nofollow' => 'Noindex + Nofollow (hide completely)',
+    ];
+
     public const TABS = [
         'header' => [
             'label' => 'Header',
@@ -70,10 +79,16 @@ class GlobalSettingsSchema
                 'Home page (/)' => [
                     'seo.home.title' => ['label' => 'Title (≤60 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:60']],
                     'seo.home.description' => ['label' => 'Description (≤160 chars)', 'type' => 'textarea', 'translatable' => true, 'rules' => ['nullable', 'max:160']],
+                    'seo.home.keywords' => ['label' => 'Keywords (comma separated, ≤255 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:255'], 'placeholder' => 'vietnamesisches restaurant, leipzig, pho, sushi'],
+                    'seo.home.robots' => ['label' => 'Robots directive', 'type' => 'select', 'translatable' => false, 'options' => self::ROBOTS_OPTIONS, 'default' => 'index, follow'],
+                    'seo.home.og_image' => ['label' => 'OG image (Home, 1200×630) — optional, fallback to site default', 'type' => 'image', 'translatable' => false],
                 ],
                 'Bilder page (/bilder)' => [
                     'seo.bilder.title' => ['label' => 'Title (≤60 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:60']],
                     'seo.bilder.description' => ['label' => 'Description (≤160 chars)', 'type' => 'textarea', 'translatable' => true, 'rules' => ['nullable', 'max:160']],
+                    'seo.bilder.keywords' => ['label' => 'Keywords (comma separated, ≤255 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:255'], 'placeholder' => 'bilder, galerie, mamiviet, leipzig'],
+                    'seo.bilder.robots' => ['label' => 'Robots directive', 'type' => 'select', 'translatable' => false, 'options' => self::ROBOTS_OPTIONS, 'default' => 'index, follow'],
+                    'seo.bilder.og_image' => ['label' => 'OG image (Bilder, 1200×630) — optional, fallback to site default', 'type' => 'image', 'translatable' => false],
                 ],
                 'Site-wide defaults' => [
                     'seo.og_image' => ['label' => 'Default OG image (1200×630)', 'type' => 'image', 'translatable' => false],

@@ -6,6 +6,7 @@ use App\Filament\Support\GlobalSettingsSchema;
 use App\Models\Setting;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Section as FormSection;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -45,7 +46,11 @@ class GlobalSettings extends Page implements HasForms
                 $values[$fieldKey . '__de'] = is_array($stored) ? ($stored['de'] ?? '') : (string) ($stored ?? '');
                 $values[$fieldKey . '__en'] = is_array($stored) ? ($stored['en'] ?? '') : '';
             } else {
-                $values[$fieldKey] = is_string($stored) ? $stored : (string) ($stored ?? '');
+                if ($stored === null && isset($def['default'])) {
+                    $values[$fieldKey] = $def['default'];
+                } else {
+                    $values[$fieldKey] = is_string($stored) ? $stored : (string) ($stored ?? '');
+                }
             }
         }
         $this->form->fill($values);
@@ -122,17 +127,21 @@ class GlobalSettings extends Page implements HasForms
             ->columnSpanFull();
     }
 
-    private static function singleField(string $fieldKey, array $def): TextInput|Textarea|FileUpload
+    private static function singleField(string $fieldKey, array $def): TextInput|Textarea|FileUpload|Select
     {
         return self::buildComponent($fieldKey, $def)->columnSpanFull();
     }
 
-    private static function buildComponent(string $statePath, array $def): TextInput|Textarea|FileUpload
+    private static function buildComponent(string $statePath, array $def): TextInput|Textarea|FileUpload|Select
     {
         $component = match ($def['type']) {
             'textarea' => Textarea::make($statePath)->rows(3),
             'image' => FileUpload::make($statePath)->image()->disk('public')->directory('seo')->imageEditor(),
             'url' => TextInput::make($statePath)->url(),
+            'select' => Select::make($statePath)
+                ->options($def['options'] ?? [])
+                ->default($def['default'] ?? null)
+                ->selectablePlaceholder(false),
             default => TextInput::make($statePath)->maxLength(500),
         };
 
@@ -145,6 +154,9 @@ class GlobalSettings extends Page implements HasForms
         }
         if (! empty($def['placeholder'])) {
             $component->placeholder($def['placeholder']);
+        }
+        if (! empty($def['helperText'])) {
+            $component->helperText($def['helperText']);
         }
 
         return $component;
