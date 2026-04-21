@@ -52,90 +52,116 @@ aaPanel GUI → **Databases** → Add:
 
 ### 1.3 Clone repo
 
-```bash
-cd /www/wwwroot/restaurant-mamiviet.com
+**aaPanel tạo sẵn thư mục** `/www/wwwroot/restaurant-mamiviet.com` khi setup website. Phải backup + xoá trước khi clone:
 
-# Backup landing page hiện tại
+```bash
+# Backup landing cũ (bao gồm cả thư mục mặc định của aaPanel)
 mkdir -p /root/backup
 mv /www/wwwroot/restaurant-mamiviet.com /root/backup/landing-old-$(date +%Y%m%d)
 
-# Clone
+# Clone fresh
 cd /www/wwwroot
 git clone https://github.com/locdev-2001/mamiviet.git restaurant-mamiviet.com
 cd restaurant-mamiviet.com
 
-# Set correct ownership (www là user mặc định của aaPanel Nginx)
+# Ownership (www là user Nginx mặc định của aaPanel)
 chown -R www:www /www/wwwroot/restaurant-mamiviet.com
 chmod -R 755 /www/wwwroot/restaurant-mamiviet.com
 chmod -R 775 storage bootstrap/cache
 ```
+
+> **Lưu ý SSL**: cert Let's Encrypt đã issue nằm tại `/www/server/panel/vhost/cert/restaurant-mamiviet.com/` (tách biệt khỏi document root) → an toàn khi xoá web root. `.well-known/` validation cũng dùng path riêng qua include.
 
 ### 1.4 Environment config
 
 ```bash
 cp .env.production.example .env
 nano .env
-# Điền: DB_PASSWORD, APP_URL=https://restaurant-mamiviet.com, generate APP_KEY ở bước dưới
+# Điền tối thiểu:
+#   DB_PASSWORD=<strong>
+#   APP_URL=https://restaurant-mamiviet.com
+#   INSTAGRAM_USERNAME=mami.viet
+#   INSTAGRAM_API_TOKEN=<apify_token>     (optional — có thể set qua Setting sau)
 ```
 
-```bash
-php artisan key:generate --force
-```
+### 1.5 Install dependencies
 
-### 1.5 Install dependencies + build
+**Quan trọng — đúng thứ tự**: composer install **TRƯỚC** `key:generate` (artisan cần `vendor/autoload.php`).
 
 ```bash
+# 1. Composer dependencies trước
 composer install --no-dev --optimize-autoloader
+
+# 2. Generate APP_KEY (sau khi có vendor/)
+php artisan key:generate --force
+
+# 3. Frontend build
 bun install --frozen-lockfile
 bun run build
 ```
 
-### 1.6 Database migrate + seed
+> **Nếu `bun install` fail** với lỗi "tarball extraction" hoặc "network timeout":
+> ```bash
+> rm -rf node_modules ~/.bun/install/cache
+> bun install --frozen-lockfile
+> ```
+> **Fallback** nếu bun tiếp tục lỗi: dùng npm
+> ```bash
+> apt install -y nodejs npm   # hoặc curl Node 20 setup
+> npm install --no-audit --no-fund
+> npm run build
+> ```
+> Set `USE_NPM=1 ./deploy.sh` cho lần sau.
+
+### 1.6 Publish vendor assets
+
+Livewire + Filament asset files phải publish thủ công, nếu không sẽ 404 `/livewire/livewire.min.js` và Filament components không load:
+
+```bash
+php artisan vendor:publish --tag=livewire:assets --force
+php artisan filament:assets
+php artisan storage:link
+```
+
+### 1.7 Database migrate + seed
 
 ```bash
 php artisan migrate --force
 php artisan db:seed --class=GlobalSettingsSeeder --force
 # KHÔNG seed PostSeeder (đó là demo data)
 
-# Tạo user admin đầu tiên cho Filament
+# Tạo admin user đầu tiên cho Filament
 php artisan make:filament-user
 # Prompt: name, email, password
 ```
 
-### 1.7 Storage link + permissions
+### 1.8 Permissions cuối
 
 ```bash
-php artisan storage:link
-
-# Đảm bảo writable
-chown -R www:www storage bootstrap/cache public/build
+chown -R www:www storage bootstrap/cache public/build public/storage public/vendor
 find storage -type d -exec chmod 775 {} \;
 find storage -type f -exec chmod 664 {} \;
 ```
 
-### 1.8 Nginx config (quan trọng — hiện tại đang cho static)
+### 1.9 Nginx config — update cho Laravel
 
-Edit file config qua aaPanel → **Websites** → `restaurant-mamiviet.com` → **Configuration File**, hoặc trực tiếp:
+**2 thay đổi CRITICAL** (không làm → site không chạy):
 
-```bash
-nano /www/server/panel/vhost/nginx/restaurant-mamiviet.com.conf
-```
+1. **Nginx root** → trỏ vào `public/` subfolder (qua aaPanel → Websites → site → **Directory** tab → "Website directory")
+2. **Laravel rewrite** → điền vào rewrite file riêng (aaPanel → **URL rewrite** tab), KHÔNG viết trực tiếp trong main config
 
-**Đổi 2 chỗ quan trọng:**
+**⚠️ Lưu ý aaPanel validator**:
+- Trong main config, **GIỮ NGUYÊN** dòng `#error_page 404/404.html;` ngay sau `#SSL-START` — panel từ chối save nếu xoá
+- Rewrite rule vào file riêng: `/www/server/panel/vhost/rewrite/restaurant-mamiviet.com.conf`, không paste vào main config
 
-1. `root` → trỏ vào `public/` subfolder:
-```nginx
-root /www/wwwroot/restaurant-mamiviet.com/public;
-```
-
-2. Thêm Laravel rewrite vào `/www/server/panel/vhost/rewrite/restaurant-mamiviet.com.conf`:
+**Rewrite file** (`/www/server/panel/vhost/rewrite/restaurant-mamiviet.com.conf`):
 ```nginx
 location / {
     try_files $uri $uri/ /index.php?$query_string;
 }
 ```
 
-**Config Nginx đầy đủ sau sửa** (paste vào `restaurant-mamiviet.com.conf`):
+**Main config** (`/www/server/panel/vhost/nginx/restaurant-mamiviet.com.conf`) — chỉ đổi `root` + thêm security headers + block sensitive files. Giữ nguyên các aaPanel sentinel comments:
 
 ```nginx
 server {
@@ -161,37 +187,45 @@ server {
 
     #SSL-START SSL related configuration, do NOT delete or modify the next line of commented-out 404 rules
     #error_page 404/404.html;
-    ssl_certificate    /www/server/panel/vhost/cert/restaurant-mamiviet.com/fullchain.pem;
-    ssl_certificate_key    /www/server/panel/vhost/cert/restaurant-mamiviet.com/privkey.pem;
-    ssl_protocols TLSv1.2 TLSv1.3;
-    ssl_ciphers EECDH+CHACHA20:EECDH+AES128:EECDH+AES256:!MD5;
-    ssl_prefer_server_ciphers on;
-    ssl_session_cache shared:SSL:10m;
-    ssl_session_timeout 10m;
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    add_header X-Content-Type-Options nosniff always;
-    add_header X-Frame-Options SAMEORIGIN always;
-    add_header Referrer-Policy strict-origin-when-cross-origin always;
-    error_page 497 https://$host$request_uri;
+        ssl_certificate    /www/server/panel/vhost/cert/restaurant-mamiviet.com/fullchain.pem;
+        ssl_certificate_key    /www/server/panel/vhost/cert/restaurant-mamiviet.com/privkey.pem;
+        ssl_protocols TLSv1.2 TLSv1.3;
+        ssl_ciphers EECDH+CHACHA20:EECDH+AES128:EECDH+AES256:!MD5;
+        ssl_prefer_server_ciphers on;
+        ssl_session_tickets on;
+        ssl_session_cache shared:SSL:10m;
+        ssl_session_timeout 10m;
+        add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+        add_header X-Content-Type-Options nosniff always;
+        add_header X-Frame-Options SAMEORIGIN always;
+        add_header Referrer-Policy strict-origin-when-cross-origin always;
+        error_page 497  https://$host$request_uri;
     #SSL-END
 
+    #ERROR-PAGE-START  Error page configuration, allowed to be commented, deleted or modified
+    error_page 404 /404.html;
+    error_page 502 /502.html;
+    #ERROR-PAGE-END
+
     #PHP-INFO-START
-    include enable-php-83.conf;   # đảm bảo đúng version PHP 8.3
+    include enable-php-83.conf;
     #PHP-INFO-END
 
-    #REWRITE-START  (Laravel)
-    location / {
-        try_files $uri $uri/ /index.php?$query_string;
-    }
+    #REWRITE-START
+    include /www/server/panel/vhost/rewrite/restaurant-mamiviet.com.conf;
     #REWRITE-END
 
-    # Block sensitive files
+    # Block sensitive files (Laravel-specific additions)
     location ~ ^/(\.user\.ini|\.htaccess|\.git|\.env|\.svn|\.project|LICENSE|README\.md|deploy\.sh|composer\.(json|lock)|package\.json|bun\.lock)$ {
         deny all;
         return 404;
     }
 
     location ~ \.well-known { allow all; }
+
+    if ( $uri ~ "^/\.well-known/.*\.(php|jsp|py|js|css|lua|ts|go|zip|tar\.gz|rar|7z|sql|bak)$" ) {
+        return 403;
+    }
 
     # Static assets cache
     location ~* \.(jpg|jpeg|gif|png|bmp|svg|webp|ico|woff2?|ttf|eot)$ {
@@ -206,25 +240,20 @@ server {
         add_header Cache-Control "public, immutable";
     }
 
-    # Sitemap + feeds
-    location = /sitemap.xml {
-        try_files /sitemap.xml /index.php?$query_string;
-    }
-
-    # Deny access to storage internal files (only /storage/* via symlink is public)
+    # Deny dotfiles in storage symlink
     location ~ ^/storage/\. { deny all; }
 
-    access_log /www/wwwlogs/restaurant-mamiviet.com.log;
+    access_log  /www/wwwlogs/restaurant-mamiviet.com.log;
     error_log  /www/wwwlogs/restaurant-mamiviet.com.error.log;
 }
 ```
 
-Sau khi save → **Reload Nginx**:
+Sau khi save qua aaPanel UI → panel auto reload Nginx. Hoặc manual:
 ```bash
 nginx -t && systemctl reload nginx
 ```
 
-### 1.9 Queue worker (Supervisor)
+### 1.10 Queue worker (Supervisor)
 
 Install + config Supervisor để chạy queue:
 
@@ -271,7 +300,7 @@ supervisorctl status
 
 Nếu gộp chung → IG scrape block sitemap regen. Tách → sitemap luôn update ngay khi admin publish post.
 
-### 1.10 Scheduler cron
+### 1.11 Scheduler cron
 
 ```bash
 crontab -u www -e
@@ -281,7 +310,7 @@ crontab -u www -e
 
 Chạy scheduler daily `sitemap:generate` (cho scheduled posts auto-publish) + weekly cleanup.
 
-### 1.11 Passwordless sudo cho `www` reload PHP-FPM (tối ưu deploy)
+### 1.12 Passwordless sudo cho `www` reload PHP-FPM (tối ưu deploy)
 
 Deploy script gọi `sudo systemctl reload php8.3-fpm` để flush OPcache. Cấp quyền hẹp:
 
@@ -292,7 +321,7 @@ EOF
 chmod 440 /etc/sudoers.d/www-reload-php
 ```
 
-### 1.12 First deploy smoke test
+### 1.13 First deploy smoke test
 
 ```bash
 # Switch sang user www để match deploy context
@@ -401,6 +430,90 @@ aaPanel auto-renew SSL. Nếu fail:
 certbot renew --dry-run
 ```
 
+### 4.7 Clone fail: "destination path already exists"
+aaPanel auto-tạo thư mục khi setup website. Phải backup + xoá trước:
+```bash
+mv /www/wwwroot/restaurant-mamiviet.com /root/backup/old-$(date +%Y%m%d)
+cd /www/wwwroot && git clone https://github.com/locdev-2001/mamiviet.git restaurant-mamiviet.com
+```
+
+### 4.8 `php artisan` báo "Failed to open vendor/autoload.php"
+Chưa chạy `composer install`. Thứ tự đúng:
+```bash
+composer install --no-dev --optimize-autoloader   # TRƯỚC
+php artisan key:generate --force                   # SAU
+```
+
+### 4.9 Site 403 / directory index forbidden
+Nginx `root` đang trỏ repo root thay vì `/public`:
+```bash
+grep -n "^ *root " /www/server/panel/vhost/nginx/restaurant-mamiviet.com.conf
+# Expect: root /www/wwwroot/restaurant-mamiviet.com/public;
+# Fix qua aaPanel → Websites → site → Directory tab → Website directory
+# Hoặc:
+sed -i 's|root /www/wwwroot/restaurant-mamiviet.com;|root /www/wwwroot/restaurant-mamiviet.com/public;|g' /www/server/panel/vhost/nginx/restaurant-mamiviet.com.conf
+nginx -t && systemctl reload nginx
+```
+
+### 4.10 `/admin/login` trả 405 (GET)
+Thiếu Laravel rewrite. Panel → URL rewrite → paste:
+```nginx
+location / {
+    try_files $uri $uri/ /index.php?$query_string;
+}
+```
+Note: 405 khi POST `/admin/login` là **đúng** (Filament dùng Livewire POST tới `/livewire/update`).
+
+### 4.11 `/livewire/livewire.min.js` 404
+Livewire assets chưa publish:
+```bash
+php artisan vendor:publish --tag=livewire:assets --force
+php artisan filament:assets
+```
+Đã có trong `deploy.sh` từ giờ trở đi.
+
+### 4.12 `bun install` fail "tarball extraction"
+Network flaky hoặc cache corrupted:
+```bash
+rm -rf node_modules ~/.bun/install/cache
+bun pm cache rm 2>/dev/null
+bun install --frozen-lockfile
+```
+Fallback npm:
+```bash
+USE_NPM=1 ./deploy.sh
+```
+
+### 4.13 aaPanel config save fail: "Do not modify the 404 rule commented in the SSL config"
+Panel validator yêu cầu giữ nguyên dòng `#error_page 404/404.html;` ngay sau `#SSL-START`. Nếu lỡ xoá → thêm lại:
+```nginx
+#SSL-START SSL related configuration, do NOT delete or modify the next line of commented-out 404 rules
+#error_page 404/404.html;
+    ssl_certificate ...
+```
+
+### 4.14 PHP warnings: "Module already loaded" (mbstring, pdo_pgsql)
+Benign — aaPanel `php.ini` load duplicate extensions built-in. Fix optional:
+```bash
+grep -rn "mbstring\|pdo_pgsql" /www/server/php/83/etc/php.d/ 2>/dev/null
+# Comment out dòng extension=mbstring hoặc extension=pdo_pgsql trong file tìm được
+```
+
+### 4.15 Instagram scrape không chạy
+2 khả năng:
+1. **Env keys thiếu**: kiểm tra `.env`:
+   ```bash
+   grep "^INSTAGRAM_" .env
+   ```
+   Phải có `INSTAGRAM_USERNAME` + `INSTAGRAM_API_TOKEN`. Nếu dùng `Setting::set()` thay env:
+   ```bash
+   php artisan tinker
+   >>> \App\Models\Setting::set('instagram.username', 'mami.viet');
+   >>> \App\Models\Setting::set('instagram.token', 'apify_...');
+   ```
+
+2. **Queue worker sai queue name**: `ScrapeInstagramPostsJob` dùng queue `instagram-scraping`, không phải `default`. Supervisor phải có 2 programs riêng — xem § 1.10.
+
 ---
 
 ## Phần 5 — Rollback
@@ -468,18 +581,25 @@ Restore test: mỗi tháng 1 lần restore vào staging để verify backup ho�
 ## Checklist trước khi deploy lần đầu
 
 - [ ] DB created + user granted
-- [ ] `.env` copied + filled (APP_KEY, DB_PASSWORD, APP_URL)
-- [ ] PHP 8.3 extensions cài đủ
-- [ ] Bun/Node available
-- [ ] Nginx config updated (root → public, try_files)
-- [ ] SSL cert active (đã có)
-- [ ] Storage symlink created
-- [ ] Permissions 775 cho storage + bootstrap/cache
-- [ ] Supervisor queue worker running
-- [ ] Cron schedule:run active
-- [ ] Filament admin user created
-- [ ] Smoke test 5 URLs pass
-- [ ] deploy.sh executable (`chmod +x deploy.sh`)
+- [ ] `.env` copied + filled (DB_PASSWORD, APP_URL, INSTAGRAM_API_TOKEN)
+- [ ] PHP 8.3 extensions cài đủ (gd, intl, zip, exif, bcmath, fileinfo, opcache)
+- [ ] Bun hoặc Node 20+ installed
+- [ ] `composer install --no-dev --optimize-autoloader` OK
+- [ ] `php artisan key:generate --force` sau composer install
+- [ ] `bun install && bun run build` OK (retry + npm fallback nếu fail)
+- [ ] `vendor:publish --tag=livewire:assets --force` + `filament:assets`
+- [ ] Nginx config updated (root → `/public`)
+- [ ] Laravel rewrite ở `/www/server/panel/vhost/rewrite/<domain>.conf`
+- [ ] SSL cert active
+- [ ] Storage symlink created (`php artisan storage:link`)
+- [ ] Migrations + GlobalSettingsSeeder run
+- [ ] Filament admin user created (`make:filament-user`)
+- [ ] Supervisor 2 programs: `mamiviet-queue-default` + `mamiviet-queue-instagram`
+- [ ] Cron `schedule:run` active
+- [ ] Permissions 775 cho storage + bootstrap/cache + public/build + public/storage
+- [ ] Passwordless sudo cho `www` reload php8.3-fpm (optional)
+- [ ] Smoke test 5 URLs pass (`/`, `/blog`, `/admin/login`, `/sitemap.xml`, `/blog/feed.xml`)
+- [ ] `deploy.sh` executable (`chmod +x deploy.sh`)
 
 ## Checklist mỗi lần deploy
 
