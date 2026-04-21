@@ -32,6 +32,7 @@ class PostApiResource
             'og_image' => $ogImage,
             'author_name' => self::authorName(),
             'published_at_iso' => $published?->toIso8601String(),
+            'published_at_rfc2822' => $published?->toRfc2822String(),
             'published_at_display' => $published ? self::formatDate($published, $locale) : '',
             'reading_time' => (int) $post->reading_time,
             'url' => SeoBuilder::postPermalink($slug, $locale),
@@ -68,6 +69,8 @@ class PostApiResource
             'hero' => $media->getUrl('hero'),
             'width' => (int) ($media->getCustomProperty('width') ?? 0),
             'height' => (int) ($media->getCustomProperty('height') ?? 0),
+            'mime_type' => (string) ($media->mime_type ?? 'image/jpeg'),
+            'size' => (int) ($media->size ?? 0),
         ];
     }
 

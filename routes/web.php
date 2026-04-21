@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BlogFeedController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Artisan;
@@ -46,3 +47,6 @@ Route::middleware('setlocale')->group(function () {
 Route::get('/blog/preview/{post}', [PostController::class, 'preview'])
     ->middleware('signed')
     ->name('blog.preview');
+
+Route::get('/blog/feed.xml', [BlogFeedController::class, 'de'])->name('blog.feed');
+Route::get('/en/blog/feed.xml', [BlogFeedController::class, 'en'])->name('blog.feed.en');
