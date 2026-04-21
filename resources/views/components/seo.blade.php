@@ -11,9 +11,15 @@
 @foreach (($seo['hreflang'] ?? []) as $lang => $href)
     <link rel="alternate" hreflang="{{ $lang }}" href="{{ $href }}">
 @endforeach
-<link rel="alternate" hreflang="x-default" href="{{ $seo['hreflang']['de'] ?? url()->current() }}">
+@php
+    $xDefault = $seo['hreflang']['de']
+        ?? $seo['x_default']
+        ?? $seo['hreflang'][array_key_first($seo['hreflang'] ?? [])]
+        ?? url()->current();
+@endphp
+<link rel="alternate" hreflang="x-default" href="{{ $xDefault }}">
 
-<meta property="og:type" content="website">
+<meta property="og:type" content="{{ $seo['og_type'] ?? 'website' }}">
 <meta property="og:title" content="{{ $seo['title'] ?? config('app.name') }}">
 <meta property="og:description" content="{{ $seo['description'] ?? '' }}">
 <meta property="og:url" content="{{ $seo['canonical'] ?? url()->current() }}">
