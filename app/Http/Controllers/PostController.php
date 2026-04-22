@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\PostApiResource;
 use App\Models\Post;
 use App\Models\Setting;
+use App\Support\PostContentNormalizer;
 use App\Support\SeoBuilder;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\Request;
@@ -85,7 +86,7 @@ class PostController extends Controller
             ->limit(self::RELATED_LIMIT)
             ->get();
 
-        $content = $this->resolveStringTranslation($post, 'content', $locale);
+        $content = PostContentNormalizer::resolve($post, 'content', $locale);
 
         $seo = SeoBuilder::forPost($post, $locale);
 
@@ -115,12 +116,12 @@ class PostController extends Controller
         $locale = in_array($requested, Post::LOCALES, true) ? $requested : Post::PRIMARY_LOCALE;
         app()->setLocale($locale);
 
-        $title = $this->resolveStringTranslation($post, 'title', $locale)
-            ?: $this->resolveStringTranslation($post, 'title', Post::PRIMARY_LOCALE)
+        $title = PostContentNormalizer::resolve($post, 'title', $locale)
+            ?: PostContentNormalizer::resolve($post, 'title', Post::PRIMARY_LOCALE)
             ?: 'Preview';
 
-        $content = $this->resolveStringTranslation($post, 'content', $locale)
-            ?: $this->resolveStringTranslation($post, 'content', Post::PRIMARY_LOCALE);
+        $content = PostContentNormalizer::resolve($post, 'content', $locale)
+            ?: PostContentNormalizer::resolve($post, 'content', Post::PRIMARY_LOCALE);
 
         $html = view('previews.post', [
             'locale' => $locale,
@@ -135,29 +136,6 @@ class PostController extends Controller
             'Cache-Control' => 'no-store, no-cache, must-revalidate, private',
             'Referrer-Policy' => 'no-referrer',
         ]);
-    }
-
-    /**
-     * Safely resolve a translatable attribute to string.
-     * For 'content' field, converts Tiptap JSON (ProseMirror doc) → HTML if needed.
-     */
-    private function resolveStringTranslation(Post $post, string $attribute, string $locale): string
-    {
-        $value = $post->getTranslation($attribute, $locale, false);
-
-        if (is_array($value)) {
-            return $attribute === 'content' ? tiptap_converter()->asHTML($value) : '';
-        }
-
-        if (is_string($value)) {
-            // Edge case: content saved as JSON string (not decoded) — still valid Tiptap doc
-            if ($attribute === 'content' && str_starts_with(trim($value), '{"type":"doc"')) {
-                return tiptap_converter()->asHTML($value);
-            }
-            return $value;
-        }
-
-        return $value === null ? '' : (string) $value;
     }
 
     private function renderNotFound(string $locale): Response

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Support\HtmlSanitizer;
+use App\Support\PostContentNormalizer;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -75,15 +76,12 @@ class Post extends Model implements HasMedia
             foreach (self::LOCALES as $locale) {
                 $rawContent = $post->getTranslation('content', $locale, false);
 
-                // Tiptap editor sometimes emits JSON (ProseMirror doc) instead of HTML —
-                // happens when Livewire serializes state as array during Word paste etc.
-                // Normalize to HTML string regardless of source format.
-                if (is_array($rawContent) || (is_string($rawContent) && str_starts_with(trim($rawContent), '{"type":"doc"'))) {
-                    $rawContent = tiptap_converter()->asHTML($rawContent);
-                }
+                // Normalize Tiptap JSON (ProseMirror doc) → HTML. Livewire sometimes
+                // serializes editor state as array when admin paste content from Word.
+                $htmlContent = PostContentNormalizer::contentToHtml($rawContent, $post->id, $locale);
 
-                if (is_string($rawContent) && $rawContent !== '') {
-                    $normalized = HtmlSanitizer::normalizeMediaUrls($rawContent);
+                if ($htmlContent !== '') {
+                    $normalized = HtmlSanitizer::normalizeMediaUrls($htmlContent);
                     $clean = HtmlSanitizer::clean($normalized);
                     $post->setTranslation('content', $locale, $clean);
                 }

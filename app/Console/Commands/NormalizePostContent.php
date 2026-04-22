@@ -2,8 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\RegenerateSitemap;
 use App\Models\Post;
+use App\Support\PostContentNormalizer;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Cache;
 
 class NormalizePostContent extends Command
 {
@@ -14,49 +17,57 @@ class NormalizePostContent extends Command
     public function handle(): int
     {
         $dryRun = (bool) $this->option('dry-run');
-        $converted = 0;
-        $skipped = 0;
+        $postsConverted = 0;
+        $localesConverted = 0;
+        $failed = 0;
 
-        Post::withTrashed()->chunkById(50, function ($posts) use (&$converted, &$skipped, $dryRun) {
+        Post::withTrashed()->chunkById(50, function ($posts) use (&$postsConverted, &$localesConverted, &$failed, $dryRun) {
             foreach ($posts as $post) {
-                $needsSave = false;
+                try {
+                    $touched = false;
+                    foreach (Post::LOCALES as $locale) {
+                        $raw = $post->getTranslation('content', $locale, false);
+                        if ($raw === null || $raw === '') {
+                            continue;
+                        }
 
-                foreach (Post::LOCALES as $locale) {
-                    $raw = $post->getTranslation('content', $locale, false);
+                        $isTiptapDoc = is_array($raw) || (is_string($raw) && PostContentNormalizer::looksLikeTiptapDoc($raw));
+                        if (! $isTiptapDoc) {
+                            continue;
+                        }
 
-                    if ($raw === null || $raw === '') {
-                        continue;
+                        $html = PostContentNormalizer::contentToHtml($raw, $post->id, $locale);
+                        $this->line("  Post #{$post->id} [{$locale}]: " . strlen($html) . ' chars HTML');
+
+                        if (! $dryRun) {
+                            $post->setTranslation('content', $locale, $html);
+                            $touched = true;
+                        }
+                        $localesConverted++;
                     }
 
-                    $isJsonDoc = is_array($raw) || (is_string($raw) && str_starts_with(trim($raw), '{"type":"doc"'));
-                    if (! $isJsonDoc) {
-                        $skipped++;
-                        continue;
+                    if ($touched) {
+                        $post->saveQuietly();
+                        $postsConverted++;
                     }
-
-                    $html = tiptap_converter()->asHTML($raw);
-                    $this->line("  Post #{$post->id} [{$locale}]: " . strlen($html) . ' chars HTML');
-
-                    if (! $dryRun) {
-                        $post->setTranslation('content', $locale, $html);
-                        $needsSave = true;
-                    }
-                    $converted++;
-                }
-
-                if ($needsSave) {
-                    $post->saveQuietly();
+                } catch (\Throwable $e) {
+                    $failed++;
+                    $this->error("  Post #{$post->id} FAILED: {$e->getMessage()}");
                 }
             }
         });
 
         $this->newLine();
-        if ($dryRun) {
-            $this->info("Dry run complete. Would convert: {$converted}, Skipped (already HTML): {$skipped}");
-        } else {
-            $this->info("Converted: {$converted}, Skipped (already HTML): {$skipped}");
+        $verb = $dryRun ? 'Would convert' : 'Converted';
+        $this->info("{$verb}: {$postsConverted} posts ({$localesConverted} locales), Failed: {$failed}");
+
+        if (! $dryRun && $postsConverted > 0) {
+            Cache::forget('blog.feed.de');
+            Cache::forget('blog.feed.en');
+            RegenerateSitemap::dispatch();
+            $this->info('RSS cache cleared + sitemap regenerate dispatched.');
         }
 
-        return self::SUCCESS;
+        return $failed > 0 ? self::FAILURE : self::SUCCESS;
     }
 }

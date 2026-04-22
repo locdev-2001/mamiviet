@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Post;
+use App\Support\PostContentNormalizer;
 use App\Support\SeoBuilder;
 use Carbon\Carbon;
 
@@ -10,13 +11,13 @@ class PostApiResource
 {
     public static function forLocale(Post $post, string $locale): ?array
     {
-        $slug = (string) ($post->getTranslation('slug', $locale, false) ?: '');
+        $slug = PostContentNormalizer::resolve($post, 'slug', $locale);
         if ($slug === '') {
             return null;
         }
 
-        $title = (string) ($post->getTranslation('title', $locale, false) ?: '');
-        $excerpt = (string) ($post->getTranslation('excerpt', $locale, false) ?: '');
+        $title = PostContentNormalizer::resolve($post, 'title', $locale);
+        $excerpt = PostContentNormalizer::resolve($post, 'excerpt', $locale);
 
         $cover = self::coverImage($post);
         $ogImage = self::ogImage($post);

@@ -81,26 +81,28 @@ class SeoBuilder
 
     public static function forPost(Post $post, string $locale): array
     {
-        $titleFromSeo = (string) ($post->getTranslation('seo_title', $locale, false) ?: '');
+        $titleFromSeo = PostContentNormalizer::resolve($post, 'seo_title', $locale);
         $title = $titleFromSeo !== ''
             ? $titleFromSeo
-            : (string) ($post->getTranslation('title', $locale, false) ?: $post->getTranslation('title', self::DEFAULT_LOCALE, false) ?: 'Mamiviet Blog');
+            : (PostContentNormalizer::resolve($post, 'title', $locale)
+                ?: PostContentNormalizer::resolve($post, 'title', self::DEFAULT_LOCALE)
+                ?: 'Mamiviet Blog');
 
-        $descFromSeo = (string) ($post->getTranslation('seo_description', $locale, false) ?: '');
+        $descFromSeo = PostContentNormalizer::resolve($post, 'seo_description', $locale);
         $description = $descFromSeo !== ''
             ? $descFromSeo
-            : (string) ($post->getTranslation('excerpt', $locale, false) ?: '');
+            : PostContentNormalizer::resolve($post, 'excerpt', $locale);
 
         if ($description === '') {
-            $content = (string) ($post->getTranslation('content', $locale, false) ?: '');
+            $content = PostContentNormalizer::resolve($post, 'content', $locale);
             if ($content !== '') {
                 $plain = trim(preg_replace('/\s+/u', ' ', strip_tags($content)) ?? '');
                 $description = mb_substr($plain, 0, 160);
             }
         }
 
-        $keywords = (string) ($post->getTranslation('seo_keywords', $locale, false) ?: '');
-        $slug = (string) ($post->getTranslation('slug', $locale, false) ?: '');
+        $keywords = PostContentNormalizer::resolve($post, 'seo_keywords', $locale);
+        $slug = PostContentNormalizer::resolve($post, 'slug', $locale);
 
         $base = self::baseUrl();
         $canonical = $base . self::postUrlPath($slug, $locale);
@@ -158,7 +160,7 @@ class SeoBuilder
     {
         $hreflang = [];
         foreach (self::LOCALES as $loc) {
-            $slug = (string) ($post->getTranslation('slug', $loc, false) ?: '');
+            $slug = PostContentNormalizer::resolve($post, 'slug', $loc);
             if ($slug !== '') {
                 $hreflang[$loc] = $base . self::postUrlPath($slug, $loc);
             }
