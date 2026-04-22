@@ -44,7 +44,7 @@ class BlogFeedController extends Controller
             $channelTitle = "{$companyName} — Blog";
             $channelDescription = (string) (SeoBuilder::forPage('blog', $locale)['description'] ?? '');
 
-            return view('feeds.rss', [
+            $body = view('feeds.rss', [
                 'locale' => $locale,
                 'items' => $items,
                 'channel_title' => $channelTitle,
@@ -53,6 +53,8 @@ class BlogFeedController extends Controller
                 'channel_description' => $channelDescription,
                 'company_name' => $companyName,
             ])->render();
+
+            return '<?xml version="1.0" encoding="UTF-8"?>' . "\n" . $body;
         });
 
         return response($xml, 200, [
