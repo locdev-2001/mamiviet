@@ -139,21 +139,22 @@ class PostController extends Controller
 
     /**
      * Safely resolve a translatable attribute to string.
-     * Handles edge cases where JSON column stores nested arrays or non-scalar values.
+     * For 'content' field, converts Tiptap JSON (ProseMirror doc) → HTML if needed.
      */
     private function resolveStringTranslation(Post $post, string $attribute, string $locale): string
     {
         $value = $post->getTranslation($attribute, $locale, false);
 
-        if (is_string($value)) {
-            return $value;
+        if (is_array($value)) {
+            return $attribute === 'content' ? tiptap_converter()->asHTML($value) : '';
         }
 
-        if (is_array($value)) {
-            \Illuminate\Support\Facades\Log::warning("Post {$post->id} attribute {$attribute}[{$locale}] is array, coercing", [
-                'sample' => array_slice($value, 0, 3, true),
-            ]);
-            return '';
+        if (is_string($value)) {
+            // Edge case: content saved as JSON string (not decoded) — still valid Tiptap doc
+            if ($attribute === 'content' && str_starts_with(trim($value), '{"type":"doc"')) {
+                return tiptap_converter()->asHTML($value);
+            }
+            return $value;
         }
 
         return $value === null ? '' : (string) $value;

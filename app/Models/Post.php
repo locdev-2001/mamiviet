@@ -74,6 +74,14 @@ class Post extends Model implements HasMedia
         static::saving(function (self $post) {
             foreach (self::LOCALES as $locale) {
                 $rawContent = $post->getTranslation('content', $locale, false);
+
+                // Tiptap editor sometimes emits JSON (ProseMirror doc) instead of HTML —
+                // happens when Livewire serializes state as array during Word paste etc.
+                // Normalize to HTML string regardless of source format.
+                if (is_array($rawContent) || (is_string($rawContent) && str_starts_with(trim($rawContent), '{"type":"doc"'))) {
+                    $rawContent = tiptap_converter()->asHTML($rawContent);
+                }
+
                 if (is_string($rawContent) && $rawContent !== '') {
                     $normalized = HtmlSanitizer::normalizeMediaUrls($rawContent);
                     $clean = HtmlSanitizer::clean($normalized);
