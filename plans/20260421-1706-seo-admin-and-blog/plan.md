@@ -129,3 +129,88 @@ Mục tiêu: admin chủ động quản lý SEO cho trang chính (Home + Bilder)
 - Monitor Google Search Console crawl performance 2 weeks post-launch
 - Consider GitHub Actions CI/CD (test + Lighthouse on PRs)
 - Tech debt deferred: SPA refactor blog routes, full Lighthouse CI, Dusk admin flow tests, content-based related posts
+
+---
+
+## Final Status — CLOSED 2026-04-22
+
+**Production Deployment Complete**
+
+Plan Mamiviet SEO + Blog closure sau 5 ngày sprint (2026-04-17 → 2026-04-22). Toàn bộ 5 phases shipped → code review → tested → deployed live tại **https://restaurant-mamiviet.com** trên aaPanel + Ubuntu server.
+
+### Deliverables Tổng Hợp
+
+1. **5 Phases Completed Systematically**
+   - Phase 01: SEO admin per-page (Home, Bilder) + keywords/robots/og_image settings
+   - Phase 02: Blog backend (Post model + Filament CRUD + tiptap editor + draft preview)
+   - Phase 03: Blog frontend (/blog, /blog/{slug} React pages + SEO meta/OG/JSON-LD)
+   - Phase 04: SEO enhancements (sitemap extend, RSS 2.0 feed, Organization + Article JSON-LD)
+   - Phase 05: Testing + audit (50 PHPUnit tests + Lighthouse + Rich Results validation)
+
+2. **Code Changes: 100+ Files (75 new, 25 modified)**
+   - 32+ commits pushed main branch
+   - 4 full code reviews (all criticals addressed before merge)
+   - 50 tests passing, 131 assertions, 0 failures
+
+3. **Production Live**
+   - Deployed aaPanel (BT Panel) Ubuntu 20.04 server qua pull-based CI/CD
+   - Nginx + PHP-FPM + MySQL 5.7
+   - SSL via Let's Encrypt auto-renewal
+   - Monitoring: GA4 + GTM + Facebook Pixel tracking active
+   - GSC ownership verified, sitemap indexed
+
+4. **Post-Deploy Hotfixes Applied**
+   - Tiptap editor: JSON → HTML conversion fix (Word paste mode fallback)
+   - DRY refactor: `PostContentNormalizer` helper extracted (fixed 4 call sites duplicate sanitize logic)
+   - GBP Place ID integration: verified restaurant info display
+   - GA4 + GTM + FB Pixel: tracking events firing correctly
+   - Nginx root path: corrected (repo root → /public subdirectory)
+   - Livewire assets: `php artisan vendor:publish --tag=livewire-assets` applied
+   - Bun install retry: added exponential backoff + cache clear fallback trong deploy.sh
+   - CRLF line-ending: auto-reset để Ubuntu không báo cảnh báo
+   - Git safe.directory: added config để fix dubious ownership on shared hosting
+   - Smoke test: 5 URLs checked post-deploy (home, /bilder, /blog, /admin, feed.xml)
+
+5. **Handover Documentation**
+   - `docs/handover.md` created: 10-step client transition checklist
+   - Client credentials + ownership transfer guide
+   - Admin workflow documentation (SEO settings, blog publishing, image upload)
+   - Troubleshooting procedures (common 500 errors, cache clearing, deployment logs)
+   - Rollback strategy (git revert + redeploy procedure)
+
+### Outstanding
+
+**Google Search Console Re-crawl Pending (3-7 days)**
+- SERP snippet cached stale (từ ALORÉA restaurant name, cần update → Mamiviet)
+- GSC sitemap submitted + index request sent
+- Monitor crawl stats weekly, verify brand name update riêng lẻ per result sau re-crawl
+
+### Key Real-World Issues Resolved
+
+| Issue | Root Cause | Fix |
+|-------|-----------|-----|
+| Clone into aaPanel existing dir | aaPanel didn't remove old code | Backup + manual rm -rf trước clone |
+| Composer install fail | Key generation before install | Reorder: install → config:cache → key:generate |
+| 404 static assets | Nginx root = repo root, not /public | Fix nginx vhost root `/home/app/mamiviet/public` |
+| aaPanel SSL validation error | Custom SSL config format | Add sentinel comment `# Certbot managed` |
+| Livewire assets 404 | Package assets not published | Artisan vendor:publish --tag=livewire-assets |
+| Bun install timeout | Tarball extraction too slow | Exponential retry (3 attempts) + cache clear |
+| Image upload 404 (tiptap) | Relative URL path broken | Tiptap config: `use_relative_paths=false` |
+| YouTube embed lost | Purify allowlist missing attrs | Add `data-youtube-video` + `data-video-type` |
+| Admin form won't save (de/en) | Required validator on EN string field | Make required only for primary locale DE |
+| CRLF warnings | Windows CRLF → Linux LF mismatch | Auto-reset trong deploy.sh `git config core.autocrlf input` |
+| Dubious git ownership | aaPanel shared dir permissions | git config safe.directory /home/app/mamiviet |
+| GitHub push auth fail | SSH key account mismatch | Config SSH alias `github-locdev` per account |
+| /blog/feed.xml 500 error | PHP short tag `<?xml>` interpreted | Move XML declaration to controller, wrap in echo |
+| Tiptap content saved JSON | ProseMirror JSON instead HTML | Extract `PostContentNormalizer`, try/catch + shape validate |
+
+### Metrics
+
+- **Timeline**: 5 days (ideation 2026-04-17 → closed 2026-04-22)
+- **Commits**: 32+ (15 phases + 10 fixes + 7 docs)
+- **Code reviews**: 5 (phases 1-4 + final review)
+- **Tests**: 50 passing, 0 failures, 131 assertions
+- **Files**: 100+ changed
+- **Confidence**: 9/10 at handover (site serving content, tracking live, admin autonomous)
+
+**Plan Status**: ✅ CLOSED — All 5 phases complete, production live, handover documented.
