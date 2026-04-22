@@ -47,8 +47,11 @@
 
     @viteReactRefresh
     @vite(['src/index.css', 'src/styles/font.css', 'src/main.tsx'])
+
+    @include('partials.tracking')
 </head>
 <body>
+    @include('partials.tracking-body')
     <div id="root"></div>
     @if (! empty($postContent))
         <div id="post-content-html" hidden aria-hidden="true">{!! $postContent !!}</div>

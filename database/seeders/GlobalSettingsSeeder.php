@@ -79,6 +79,13 @@ class GlobalSettingsSeeder extends Seeder
             'seo.bilder.og_image' => null,
             'seo.og_image' => null,
             'seo.google_site_verification' => null,
+
+            // Tracking & Analytics (leave empty to disable)
+            'tracking.ga4_measurement_id' => null,
+            'tracking.gtm_container_id' => null,
+            'tracking.gbp_place_id' => null,
+            'tracking.gbp_cid' => null,
+            'tracking.fb_pixel_id' => null,
         ];
 
         foreach ($map as $key => $value) {

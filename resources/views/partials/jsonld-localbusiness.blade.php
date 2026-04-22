@@ -30,14 +30,20 @@
         ];
     }
 
+    $placeId = trim((string) (Setting::raw('tracking.gbp_place_id') ?? ''));
+    $gbpCid = trim((string) (Setting::raw('tracking.gbp_cid') ?? ''));
+
     $sameAs = array_values(array_filter([
         Setting::get('social.instagram_url'),
         Setting::get('social.facebook_url'),
+        $placeId !== '' ? "https://www.google.com/maps/place/?q=place_id:{$placeId}" : null,
+        $gbpCid !== '' && preg_match('/^\d+$/', $gbpCid) ? "https://maps.google.com/?cid={$gbpCid}" : null,
     ]));
 
     $data = array_filter([
         '@context' => 'https://schema.org',
         '@type' => 'Restaurant',
+        '@id' => $url . '/#restaurant',
         'name' => $name,
         'url' => $url,
         'telephone' => $phone ?: null,
@@ -68,5 +74,5 @@
     ], fn ($v) => $v !== null);
 @endphp
 <script type="application/ld+json">
-{!! json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+{!! json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}
 </script>

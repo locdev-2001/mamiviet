@@ -97,6 +97,52 @@ class GlobalSettingsSchema
                 ],
             ],
         ],
+        'tracking' => [
+            'label' => 'Tracking',
+            'sections' => [
+                'Google Analytics' => [
+                    'tracking.ga4_measurement_id' => [
+                        'label' => 'GA4 Measurement ID',
+                        'type' => 'text',
+                        'translatable' => false,
+                        'placeholder' => 'G-XXXXXXXXXX',
+                        'helperText' => 'Google Analytics → Admin → Data Streams → copy "Measurement ID". Leave empty to disable.',
+                    ],
+                    'tracking.gtm_container_id' => [
+                        'label' => 'Google Tag Manager container ID (optional)',
+                        'type' => 'text',
+                        'translatable' => false,
+                        'placeholder' => 'GTM-XXXXXXX',
+                        'helperText' => 'Use GTM if you need multiple tags. Alternative to GA4 direct. Load in parallel supported.',
+                    ],
+                ],
+                'Google Business Profile' => [
+                    'tracking.gbp_place_id' => [
+                        'label' => 'Google Business Place ID',
+                        'type' => 'text',
+                        'translatable' => false,
+                        'placeholder' => 'ChIJxxxxxxxxxxxxxxxxxxx',
+                        'helperText' => 'Find at https://developers.google.com/maps/documentation/places/web-service/place-id. Used in schema.org LocalBusiness for richer Google results.',
+                    ],
+                    'tracking.gbp_cid' => [
+                        'label' => 'Google Business CID (numeric)',
+                        'type' => 'text',
+                        'translatable' => false,
+                        'placeholder' => '12345678901234567890',
+                        'helperText' => 'Optional. Extract from Google Maps URL after "?cid=". Used as secondary identifier.',
+                    ],
+                ],
+                'Social pixels (optional)' => [
+                    'tracking.fb_pixel_id' => [
+                        'label' => 'Facebook Pixel ID',
+                        'type' => 'text',
+                        'translatable' => false,
+                        'placeholder' => '1234567890123456',
+                        'helperText' => 'Facebook Business Manager → Events Manager → Pixel → copy ID. Leave empty to disable.',
+                    ],
+                ],
+            ],
+        ],
     ];
 
     /**
