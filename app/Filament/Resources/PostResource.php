@@ -54,9 +54,13 @@ class PostResource extends Resource
 
     protected static function contentSchema(): array
     {
+        $requiredOnPrimary = static fn (\Livewire\Component $livewire): bool => (
+            ($livewire->activeLocale ?? Post::PRIMARY_LOCALE) === Post::PRIMARY_LOCALE
+        );
+
         return [
             Forms\Components\TextInput::make('title')
-                ->required()
+                ->required($requiredOnPrimary)
                 ->maxLength(180)
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (?string $state, Forms\Set $set, Forms\Get $get) {
@@ -67,13 +71,18 @@ class PostResource extends Resource
                         $set('slug', Str::slug($state));
                     }
                 })
+                ->helperText(static fn (\Livewire\Component $livewire): string => (
+                    ($livewire->activeLocale ?? Post::PRIMARY_LOCALE) === Post::PRIMARY_LOCALE
+                        ? 'Required for primary locale (DE).'
+                        : 'Optional — leave empty if not translated yet.'
+                ))
                 ->columnSpanFull(),
 
             Forms\Components\TextInput::make('slug')
-                ->required()
+                ->required($requiredOnPrimary)
                 ->maxLength(200)
                 ->regex('/^[a-z0-9-]+$/')
-                ->helperText('Lowercase letters, numbers, and hyphens only. Auto-generated from title if empty.')
+                ->helperText('Lowercase letters, numbers, hyphens only. Auto-generated from title if empty.')
                 ->rule(static::uniqueSlugRule())
                 ->columnSpanFull(),
 
@@ -84,7 +93,7 @@ class PostResource extends Resource
 
             TiptapEditor::make('content')
                 ->profile('default')
-                ->required()
+                ->required($requiredOnPrimary)
                 ->maxContentWidth('5xl')
                 ->extraInputAttributes(['style' => 'min-height: 400px'])
                 ->columnSpanFull(),
