@@ -98,11 +98,30 @@ if [[ "$SKIP_BUILD" -eq 0 ]]; then
     fi
 fi
 
+# Auto-register safe.directory (git 2.35+ requires for root-owned dirs)
+repo_path=$(pwd)
+if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+    warn "Registering safe.directory exception for $repo_path"
+    git config --global --add safe.directory "$repo_path" || fail "Failed to register safe.directory"
+fi
+
+# Force LF line-endings locally (prevents CRLF drift from Windows dev → Linux server)
+git config --local core.autocrlf false 2>/dev/null || true
+git config --local core.eol lf 2>/dev/null || true
+
 current_branch=$(git rev-parse --abbrev-ref HEAD)
 [[ "$current_branch" == "$BRANCH" ]] || fail "Not on branch '$BRANCH' (current: '$current_branch'). Refusing to deploy."
 
+# Auto-reset Laravel skeleton .gitignore files (CRLF drift from old clones is harmless noise)
+if ! git diff-index --quiet HEAD -- storage/ bootstrap/cache/; then
+    warn "Auto-resetting storage/ + bootstrap/cache/ .gitignore drift"
+    git checkout -- storage/ bootstrap/cache/ 2>/dev/null || true
+fi
+
 if ! git diff-index --quiet HEAD --; then
-    fail "Working tree has uncommitted changes. Commit or stash before deploying."
+    warn "Working tree has uncommitted changes:"
+    git status --short | head -20
+    fail "Commit, stash, or reset before deploying. Common fix: git checkout -- ."
 fi
 
 ok "Preflight passed"

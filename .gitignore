@@ -28,6 +28,10 @@ lerna-debug.log*
 /public/js/livewire
 /public/css/awcodes
 /public/js/awcodes
+# Livewire published assets (re-published via vendor:publish --tag=livewire:assets)
+/public/vendor
+# Spatie media library temp uploads
+/storage/media-library
 
 # Env / secrets
 .env
