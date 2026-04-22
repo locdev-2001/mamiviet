@@ -85,7 +85,7 @@ class PostController extends Controller
             ->limit(self::RELATED_LIMIT)
             ->get();
 
-        $content = (string) ($post->getTranslation('content', $locale, false) ?: '');
+        $content = $this->resolveStringTranslation($post, 'content', $locale);
 
         $seo = SeoBuilder::forPost($post, $locale);
 
@@ -115,13 +115,12 @@ class PostController extends Controller
         $locale = in_array($requested, Post::LOCALES, true) ? $requested : Post::PRIMARY_LOCALE;
         app()->setLocale($locale);
 
-        $title = (string) ($post->getTranslation('title', $locale, false)
-            ?: $post->getTranslation('title', Post::PRIMARY_LOCALE, false)
-            ?: 'Preview');
+        $title = $this->resolveStringTranslation($post, 'title', $locale)
+            ?: $this->resolveStringTranslation($post, 'title', Post::PRIMARY_LOCALE)
+            ?: 'Preview';
 
-        $content = (string) ($post->getTranslation('content', $locale, false)
-            ?: $post->getTranslation('content', Post::PRIMARY_LOCALE, false)
-            ?: '');
+        $content = $this->resolveStringTranslation($post, 'content', $locale)
+            ?: $this->resolveStringTranslation($post, 'content', Post::PRIMARY_LOCALE);
 
         $html = view('previews.post', [
             'locale' => $locale,
@@ -136,6 +135,28 @@ class PostController extends Controller
             'Cache-Control' => 'no-store, no-cache, must-revalidate, private',
             'Referrer-Policy' => 'no-referrer',
         ]);
+    }
+
+    /**
+     * Safely resolve a translatable attribute to string.
+     * Handles edge cases where JSON column stores nested arrays or non-scalar values.
+     */
+    private function resolveStringTranslation(Post $post, string $attribute, string $locale): string
+    {
+        $value = $post->getTranslation($attribute, $locale, false);
+
+        if (is_string($value)) {
+            return $value;
+        }
+
+        if (is_array($value)) {
+            \Illuminate\Support\Facades\Log::warning("Post {$post->id} attribute {$attribute}[{$locale}] is array, coercing", [
+                'sample' => array_slice($value, 0, 3, true),
+            ]);
+            return '';
+        }
+
+        return $value === null ? '' : (string) $value;
     }
 
     private function renderNotFound(string $locale): Response
