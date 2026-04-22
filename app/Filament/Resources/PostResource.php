@@ -102,21 +102,31 @@ class PostResource extends Resource
 
     protected static function seoSchema(): array
     {
+        // Soft-recommendation counter: shows char count + Google-recommended target
+        // DB columns are JSON (4GB max), so no hard server-side limit needed
+        $softCounter = static fn (int $recommended, string $prefix) =>
+            static function (?string $state) use ($recommended, $prefix): string {
+                $len = mb_strlen((string) $state);
+                $indicator = $len === 0 ? '' : ($len <= $recommended ? ' ✓' : ' ⚠ over Google limit');
+                return "{$prefix} {$len}/{$recommended} recommended{$indicator}";
+            };
+
         return [
             Forms\Components\TextInput::make('seo_title')
-                ->maxLength(60)
-                ->helperText('Leave empty to use the post title. Max 60 chars.')
+                ->live(debounce: 400)
+                ->helperText($softCounter(60, 'Leave empty to use the post title. Google truncates >60.'))
                 ->columnSpanFull(),
 
             Forms\Components\Textarea::make('seo_description')
-                ->maxLength(160)
-                ->rows(2)
-                ->helperText('Leave empty to use the excerpt. Max 160 chars.')
+                ->rows(3)
+                ->live(debounce: 400)
+                ->helperText($softCounter(160, 'Leave empty to use the excerpt. Google truncates >160.'))
                 ->columnSpanFull(),
 
-            Forms\Components\TextInput::make('seo_keywords')
-                ->maxLength(255)
-                ->helperText('Comma separated. Max 255 chars.')
+            Forms\Components\Textarea::make('seo_keywords')
+                ->rows(2)
+                ->live(debounce: 400)
+                ->helperText($softCounter(255, 'Comma separated. Google ignores meta keywords, but Bing/Yandex use them.'))
                 ->columnSpanFull(),
 
             Forms\Components\SpatieMediaLibraryFileUpload::make('og')
