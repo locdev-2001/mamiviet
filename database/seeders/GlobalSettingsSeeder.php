@@ -87,7 +87,9 @@ class GlobalSettingsSeeder extends Seeder
             'tracking.gbp_cid' => null,
             'tracking.fb_pixel_id' => null,
 
-            // Optional full JSON-LD override. Leave null to use the generated LocalBusiness fallback.
+            // Optional full JSON-LD overrides. Leave null to use generated fallbacks.
+            'schema.website_json' => null,
+            'schema.organization_json' => null,
             'schema.local_business_json' => null,
         ];
 

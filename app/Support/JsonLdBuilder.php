@@ -28,6 +28,60 @@ class JsonLdBuilder
         return self::generatedLocalBusiness($locale);
     }
 
+    public static function website(): array
+    {
+        $stored = Setting::raw('schema.website_json');
+
+        if (is_array($stored) && $stored !== []) {
+            return $stored;
+        }
+
+        return self::generatedWebsite();
+    }
+
+    public static function organization(): array
+    {
+        $stored = Setting::raw('schema.organization_json');
+
+        if (is_array($stored) && $stored !== []) {
+            return $stored;
+        }
+
+        return self::generatedOrganization();
+    }
+
+    public static function generatedWebsite(): array
+    {
+        return [
+            '@context' => 'https://schema.org',
+            '@type' => 'WebSite',
+            'name' => Setting::get('footer.company_name') ?: config('app.name'),
+            'url' => rtrim(config('app.url'), '/'),
+            'inLanguage' => ['de-DE', 'en-US'],
+        ];
+    }
+
+    public static function generatedOrganization(): array
+    {
+        $url = rtrim(config('app.url'), '/');
+        $sameAs = array_values(array_filter([
+            Setting::get('social.instagram_url'),
+            Setting::get('social.facebook_url'),
+        ]));
+
+        return array_filter([
+            '@context' => 'https://schema.org',
+            '@type' => 'Organization',
+            'name' => Setting::get('footer.company_name') ?: 'Mamiviet',
+            'url' => $url,
+            'logo' => [
+                '@type' => 'ImageObject',
+                'url' => $url . '/logo.png',
+            ],
+            'sameAs' => $sameAs ?: null,
+        ], fn ($value) => $value !== null);
+    }
+
     public static function generatedLocalBusiness(?string $locale = null): array
     {
         $locale ??= app()->getLocale();

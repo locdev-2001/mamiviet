@@ -1,13 +1,4 @@
-@php
-    $name = \App\Models\Setting::get('footer.company_name') ?: config('app.name');
-    $url = rtrim(config('app.url'), '/');
-@endphp
+@php($data = \App\Support\JsonLdBuilder::website())
 <script type="application/ld+json">
-{!! json_encode([
-    '@context' => 'https://schema.org',
-    '@type' => 'WebSite',
-    'name' => $name,
-    'url' => $url,
-    'inLanguage' => ['de-DE', 'en-US'],
-], JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) !!}
+{!! json_encode($data, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG | JSON_HEX_AMP) !!}
 </script>
