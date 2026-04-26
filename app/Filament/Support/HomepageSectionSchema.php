@@ -203,6 +203,7 @@ class HomepageSectionSchema
 
     private static function mediaUpload(string $collection, bool $multiple): SpatieMediaLibraryFileUpload
     {
+        $isHeroBanner = $collection === 'bg';
         $upload = SpatieMediaLibraryFileUpload::make($collection)
             ->collection($collection)
             ->label(ucfirst(str_replace('_', ' ', $collection)))
@@ -211,7 +212,16 @@ class HomepageSectionSchema
             ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
             ->maxSize(8 * 1024)
             ->columnSpan($multiple ? 2 : 1)
-            ->helperText('JPEG / PNG / WebP, max 8 MB. Auto-converted to responsive WebP.');
+            ->helperText($isHeroBanner
+                ? 'Homepage banner: use a wide landscape image. Recommended 1920x900 px or 2560x1200 px, ratio 16:9 to 21:9. Avoid vertical photos because they will be heavily cropped.'
+                : 'JPEG / PNG / WebP, max 8 MB. Auto-converted to responsive WebP.');
+
+        if ($isHeroBanner) {
+            $upload->imageEditorAspectRatios([
+                '21:9',
+                '16:9',
+            ]);
+        }
 
         if ($multiple) {
             $upload->multiple()
