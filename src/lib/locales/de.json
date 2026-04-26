@@ -17,6 +17,7 @@
     "newsletter": "Newsletter",
     "bilder": "Bilder",
     "blog": "Blog",
+    "about": "Über uns",
     "kontakt": "Kontakt",
     "logo_alt": "Mamiviet Logo",
     "logo_text": "Mamiviet.",
@@ -82,6 +83,7 @@
       "welcome_title": "HERZLICH WILLKOMMEN",
       "welcome_text": "Alle Gerichte sind mit besonderem Geschmack von unseren Küchenchefs mit viel Leidenschaft und bester Qualität zubereitet. Kommen Sie zu uns ins Restaurant Mami Viet - SUSHI - Asian Cuisine und werden Sie nicht nur ein ausgezeichnetes und kulinarisches Essen vorfinden, sondern auch eine Atmosphäre spüren, die dazu einlädt dori länger zu verweilen. Zur Verfügung stehen Ihnen auch Parkplätze direkt vor der Tür.",
       "order_online": "ONLINE BESTELLEN",
+      "about_cta": "MEHR ÜBER UNS",
       "second_section": {
         "title": "ALLES NACH ORIGINAL REZEPTUR",
         "text": "Auch in Vietnam sagt man: \"Nguyen dou schmeckt so besser als bei Mami\" – daher habe wir unser Restaurant Mami Viet genannt! Unsere Küche beruht auf einer über 70 Jahre alten Tradition, kombiniert mit neuen Varianten der veganen und vegetarischen Küche. Das bedeutet Sorgfalt bei der Zubereitung der Speisen, viele frische Kräuter und der Verzicht auf künstliche Zusatzstoffe. In Mami Viet möchten wir Ihnen Woche für Woche weitere Speisen aus unserer Heimat vorstellen. Wir freuen uns, wenn Sie sich bei uns wohl fühlen und die vietnamesische Gastfreundschaft und Küche genießen. Gerne können Sie Ihre Veranstaltung – begleitet seine Hochzeit oder Ihren Geburtstag bei uns feiern. Sprechen Sie uns einfach an.",
@@ -458,5 +460,10 @@
       "message": "Der gesuchte Beitrag existiert nicht oder wurde entfernt.",
       "cta": "Zurück zum Blog"
     }
+  },
+  "about": {
+    "title": "Über uns",
+    "default_title": "Über uns — Mamiviet",
+    "back_home": "Zurück zur Startseite"
   }
-} 
+}

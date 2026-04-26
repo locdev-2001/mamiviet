@@ -61,7 +61,7 @@ class PostResource extends Resource
         return [
             Forms\Components\TextInput::make('title')
                 ->required($requiredOnPrimary)
-                ->maxLength(180)
+                ->maxLength(500)
                 ->live(onBlur: true)
                 ->afterStateUpdated(function (?string $state, Forms\Set $set, Forms\Get $get) {
                     if (! $state) {
@@ -80,7 +80,7 @@ class PostResource extends Resource
 
             Forms\Components\TextInput::make('slug')
                 ->required($requiredOnPrimary)
-                ->maxLength(200)
+                ->maxLength(300)
                 ->regex('/^[a-z0-9-]+$/')
                 ->helperText('Lowercase letters, numbers, hyphens only. Auto-generated from title if empty.')
                 ->rule(static::uniqueSlugRule())

@@ -10,6 +10,7 @@ import BackToTop from "./components/BackToTop";
 const Bilder = lazy(() => import("@/pages/Bilder"));
 const Blog = lazy(() => import("@/pages/Blog"));
 const BlogPost = lazy(() => import("@/pages/BlogPost"));
+const About = lazy(() => import("@/pages/About"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -31,8 +32,10 @@ const App = () => (
             <Route path="/bilder" element={<Bilder />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/ueber-uns" element={<About />} />
             <Route path="/en" element={<Index />} />
             <Route path="/en/gallery" element={<Bilder />} />
+            <Route path="/en/about" element={<About />} />
             <Route path="/en/blog" element={<Blog />} />
             <Route path="/en/blog/:slug" element={<BlogPost />} />
             <Route path="*" element={<NotFound />} />

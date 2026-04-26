@@ -2,6 +2,7 @@
 
 namespace App\Support;
 
+use App\Models\Page;
 use App\Models\Post;
 use App\Models\Setting;
 
@@ -24,6 +25,10 @@ class SeoBuilder
                 'title' => 'Blog — Mamiviet Restaurant Leipzig',
                 'description' => 'Geschichten, Rezepte und Neuigkeiten aus unserer vietnamesischen Küche.',
             ],
+            'about' => [
+                'title' => 'Über uns — Mamiviet Restaurant Leipzig',
+                'description' => 'Erfahren Sie mehr über Mamiviet, unser vietnamesisches Restaurant in Leipzig.',
+            ],
         ],
         'en' => [
             'home' => [
@@ -38,6 +43,10 @@ class SeoBuilder
                 'title' => 'Blog — Mamiviet Restaurant Leipzig',
                 'description' => 'Stories, recipes and news from our Vietnamese kitchen.',
             ],
+            'about' => [
+                'title' => 'About Us — Mamiviet Restaurant Leipzig',
+                'description' => 'Learn more about Mamiviet, our Vietnamese restaurant in Leipzig.',
+            ],
         ],
     ];
 
@@ -45,15 +54,18 @@ class SeoBuilder
         'home' => ['de' => '/', 'en' => '/en'],
         'bilder' => ['de' => '/bilder', 'en' => '/en/gallery'],
         'blog' => ['de' => '/blog', 'en' => '/en/blog'],
+        'about' => ['de' => '/ueber-uns', 'en' => '/en/about'],
     ];
 
-    public static function forPage(string $pageKey, string $locale): array
+    public static function forPage(string $pageKey, string $locale, ?Page $pageRecord = null): array
     {
         $fallback = self::PAGE_FALLBACK[$locale][$pageKey] ?? self::PAGE_FALLBACK[self::DEFAULT_LOCALE][$pageKey] ?? ['title' => '', 'description' => ''];
 
-        $title = (string) (Setting::get("seo.{$pageKey}.title", $locale) ?: $fallback['title']);
-        $description = (string) (Setting::get("seo.{$pageKey}.description", $locale) ?: $fallback['description']);
-        $keywords = (string) (Setting::get("seo.{$pageKey}.keywords", $locale) ?: '');
+        $pageSeo = $pageRecord ? ($pageRecord->getTranslation('seo', $locale, false) ?: []) : [];
+
+        $title = (string) ($pageSeo['title'] ?? Setting::get("seo.{$pageKey}.title", $locale) ?: $fallback['title']);
+        $description = (string) ($pageSeo['description'] ?? Setting::get("seo.{$pageKey}.description", $locale) ?: $fallback['description']);
+        $keywords = (string) ($pageSeo['keywords'] ?? Setting::get("seo.{$pageKey}.keywords", $locale) ?: '');
 
         $robotsRaw = Setting::raw("seo.{$pageKey}.robots");
         $robots = is_string($robotsRaw) && $robotsRaw !== '' ? $robotsRaw : 'index, follow';

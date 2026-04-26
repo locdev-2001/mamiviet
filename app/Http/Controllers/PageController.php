@@ -22,11 +22,20 @@ class PageController extends Controller
         return $this->renderPage('bilder');
     }
 
+    public function about(): View
+    {
+        return $this->renderPage('ueber-uns');
+    }
+
     private function renderPage(string $slugDe): View
     {
         $locale = App::getLocale();
         $isHome = $slugDe === 'home';
-        $pageKey = $slugDe === 'bilder' ? 'bilder' : 'home';
+        $pageKey = match ($slugDe) {
+            'bilder' => 'bilder',
+            'ueber-uns' => 'about',
+            default => 'home',
+        };
 
         $page = Page::when($isHome, fn ($q) => $q->with('sections.media'))
             ->whereJsonContains('slug->de', $slugDe)
@@ -34,9 +43,9 @@ class PageController extends Controller
 
         $data = [
             'locale' => $locale,
-            'seo' => SeoBuilder::forPage($pageKey, $locale),
+            'seo' => SeoBuilder::forPage($pageKey, $locale, $page),
             'isHome' => $isHome,
-            'appContent' => $this->buildAppContent($page, $locale, $isHome),
+            'appContent' => $this->buildAppContent($page, $locale, $isHome, $pageKey),
         ];
 
         if (! $isHome) {
@@ -46,12 +55,28 @@ class PageController extends Controller
         return view('app', $data);
     }
 
-    private function buildAppContent(?Page $page, string $locale, bool $isHome): array
+    private function buildAppContent(?Page $page, string $locale, bool $isHome, string $pageKey = 'home'): array
     {
         $payload = [
             'locale' => $locale,
             'settings' => Setting::forLocale($locale),
         ];
+
+        if ($pageKey === 'about') {
+            if ($page) {
+                $content = $page->getTranslation('content', $locale);
+                $fallbackContent = $page->getTranslation('content', 'de');
+                $heroImage = $content['hero_image'] ?? $fallbackContent['hero_image'] ?? null;
+
+                $payload['about'] = [
+                    'title' => $content['title'] ?? $fallbackContent['title'] ?? null,
+                    'content' => $content['body'] ?? $fallbackContent['body'] ?? null,
+                    'heroImage' => $this->publicStorageUrl($heroImage),
+                ];
+            }
+
+            return $payload;
+        }
 
         if (! $isHome) {
             return $payload;
@@ -68,6 +93,21 @@ class PageController extends Controller
         return $payload;
     }
 
+    private function publicStorageUrl(?string $path): ?string
+    {
+        $path = is_string($path) ? trim($path) : '';
+
+        if ($path === '') {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://') || str_starts_with($path, '/')) {
+            return $path;
+        }
+
+        return '/storage/' . ltrim($path, '/');
+    }
+
     private function buildBreadcrumb(string $slugDe, string $locale): array
     {
         $base = rtrim(config('app.url'), '/');
@@ -76,6 +116,7 @@ class PageController extends Controller
 
         $pageNames = [
             'bilder' => ['de' => 'Bilder', 'en' => 'Gallery'],
+            'ueber-uns' => ['de' => 'Über uns', 'en' => 'About Us'],
         ];
 
         return [

@@ -2,11 +2,13 @@ import { GloriaFoodButton } from '@/components/GloriaFoodButton';
 import MediaImage from '@/components/MediaImage';
 import { ParallaxImage } from '@/components/ParallaxImage';
 import { getSingleMedia, useHomepageSection } from '@/lib/contexts/AppContentContext';
+import { useAppLocale } from '@/lib/hooks/useAppContent';
 import { useTranslation } from 'react-i18next';
 
 export default function WelcomeSection() {
   const section = useHomepageSection('welcome');
   const { t } = useTranslation();
+  const locale = useAppLocale();
 
   if (section && !section.enabled) return null;
 
@@ -20,6 +22,8 @@ export default function WelcomeSection() {
   const title = c.title || t('homepage.welcome_section.welcome_title');
   const body = c.body || t('homepage.welcome_section.welcome_text');
   const ctaLabel = c.cta_label || t('homepage.welcome_section.order_online');
+  const aboutHref = locale === 'en' ? '/en/about' : '/ueber-uns';
+  const aboutCtaLabel = t('homepage.welcome_section.about_cta');
 
   return (
     <section className="py-20 px-6">
@@ -32,6 +36,18 @@ export default function WelcomeSection() {
             {brandName}
           </h2>
           <p className="font-delafield-xl mt-[50px] text-primary">{tagline}</p>
+
+          <div className="mt-10 flex justify-center">
+            <a
+              href={aboutHref}
+              reloadDocument
+              className="group relative inline-flex min-h-[54px] items-center justify-center overflow-hidden border border-primary/70 bg-[#2c241c]/80 px-9 py-4 text-[11px] font-source-semibold uppercase tracking-[0.32em] text-[#f5eee6] shadow-[0_18px_45px_rgba(0,0,0,0.22)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#d4b28b] hover:bg-primary hover:text-[#1f1913] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-4 focus-visible:ring-offset-background md:px-12"
+            >
+              <span className="pointer-events-none absolute inset-[5px] border border-white/10 transition-colors duration-300 group-hover:border-[#1f1913]/20" />
+              <span className="pointer-events-none absolute inset-x-7 top-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent transition-opacity duration-300 group-hover:opacity-70" />
+              <span className="relative">{aboutCtaLabel}</span>
+            </a>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">

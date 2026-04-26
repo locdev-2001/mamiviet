@@ -14,6 +14,7 @@ const NAV_ITEMS: readonly NavItem[] = [
   { key: 'home', href: '/' },
   { key: 'menu', href: '/menu' },
   { key: 'bilder', href: '/bilder' },
+  { key: 'about', localePaths: { de: '/ueber-uns', en: '/en/about' } },
   { key: 'blog', localePaths: { de: '/blog', en: '/en/blog' } },
   { key: 'kontakt', scroll: true, target: 'contact' },
 ] as const;
@@ -21,9 +22,11 @@ const NAV_ITEMS: readonly NavItem[] = [
 const LOCALE_PATH_MAP: Record<string, Record<string, string>> = {
   '/': { en: '/en' },
   '/bilder': { en: '/en/gallery' },
+  '/ueber-uns': { en: '/en/about' },
   '/blog': { en: '/en/blog' },
   '/en': { de: '/' },
   '/en/gallery': { de: '/bilder' },
+  '/en/about': { de: '/ueber-uns' },
   '/en/blog': { de: '/blog' },
 };
 
@@ -40,6 +43,7 @@ export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void
   const navHome = useSetting('header.nav.home', t('header.home'));
   const navMenu = useSetting('header.nav.menu', t('header.menu'));
   const navBilder = useSetting('header.nav.bilder', t('header.bilder'));
+  const navAbout = useSetting('header.nav.about', t('header.about'));
   const navBlog = useSetting('header.nav.blog', t('header.blog', 'Blog'));
   const navKontakt = useSetting('header.nav.kontakt', t('header.kontakt'));
 
@@ -47,6 +51,7 @@ export function Header({ scrollToRef }: { scrollToRef?: (target: string) => void
     home: navHome,
     menu: navMenu,
     bilder: navBilder,
+    about: navAbout,
     blog: navBlog,
     kontakt: navKontakt,
   };

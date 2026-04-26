@@ -78,16 +78,16 @@ class GlobalSettingsSchema
             'label' => 'SEO',
             'sections' => [
                 'Home page (/)' => [
-                    'seo.home.title' => ['label' => 'Title (≤60 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:60']],
-                    'seo.home.description' => ['label' => 'Description (≤160 chars)', 'type' => 'textarea', 'translatable' => true, 'rules' => ['nullable', 'max:160']],
-                    'seo.home.keywords' => ['label' => 'Keywords (comma separated, ≤255 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:255'], 'placeholder' => 'vietnamesisches restaurant, leipzig, pho, sushi'],
+                    'seo.home.title' => ['label' => 'Title (Google recommends ≤60 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:255']],
+                    'seo.home.description' => ['label' => 'Description (Google recommends ≤160 chars)', 'type' => 'textarea', 'translatable' => true, 'rules' => ['nullable', 'max:500']],
+                    'seo.home.keywords' => ['label' => 'Keywords (comma separated)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:500'], 'placeholder' => 'vietnamesisches restaurant, leipzig, pho, sushi'],
                     'seo.home.robots' => ['label' => 'Robots directive', 'type' => 'select', 'translatable' => false, 'options' => self::ROBOTS_OPTIONS, 'default' => 'index, follow'],
                     'seo.home.og_image' => ['label' => 'OG image (Home, 1200×630) — optional, fallback to site default', 'type' => 'image', 'translatable' => false],
                 ],
                 'Bilder page (/bilder)' => [
-                    'seo.bilder.title' => ['label' => 'Title (≤60 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:60']],
-                    'seo.bilder.description' => ['label' => 'Description (≤160 chars)', 'type' => 'textarea', 'translatable' => true, 'rules' => ['nullable', 'max:160']],
-                    'seo.bilder.keywords' => ['label' => 'Keywords (comma separated, ≤255 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:255'], 'placeholder' => 'bilder, galerie, mamiviet, leipzig'],
+                    'seo.bilder.title' => ['label' => 'Title (Google recommends ≤60 chars)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:255']],
+                    'seo.bilder.description' => ['label' => 'Description (Google recommends ≤160 chars)', 'type' => 'textarea', 'translatable' => true, 'rules' => ['nullable', 'max:500']],
+                    'seo.bilder.keywords' => ['label' => 'Keywords (comma separated)', 'type' => 'text', 'translatable' => true, 'rules' => ['nullable', 'max:500'], 'placeholder' => 'bilder, galerie, mamiviet, leipzig'],
                     'seo.bilder.robots' => ['label' => 'Robots directive', 'type' => 'select', 'translatable' => false, 'options' => self::ROBOTS_OPTIONS, 'default' => 'index, follow'],
                     'seo.bilder.og_image' => ['label' => 'OG image (Bilder, 1200×630) — optional, fallback to site default', 'type' => 'image', 'translatable' => false],
                 ],

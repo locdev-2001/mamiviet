@@ -13,9 +13,9 @@ class Page extends Model
     use HasFactory;
     use HasTranslations;
 
-    protected $fillable = ['slug', 'status', 'seo'];
+    protected $fillable = ['slug', 'status', 'seo', 'content'];
 
-    public array $translatable = ['slug', 'seo'];
+    public array $translatable = ['slug', 'seo', 'content'];
 
     public function sections(): HasMany
     {

@@ -27,6 +27,7 @@ Route::get('/sitemap.xml', function () {
 Route::middleware('setlocale')->group(function () {
     Route::get('/', [PageController::class, 'home'])->name('home');
     Route::get('/bilder', [PageController::class, 'bilder'])->name('bilder');
+    Route::get('/ueber-uns', [PageController::class, 'about'])->name('about');
 
     Route::get('/blog', [PostController::class, 'index'])->name('blog.index');
     Route::get('/blog/{slug}', [PostController::class, 'show'])
@@ -36,6 +37,7 @@ Route::middleware('setlocale')->group(function () {
     Route::prefix('en')->group(function () {
         Route::get('/', [PageController::class, 'home'])->name('home.en');
         Route::get('/gallery', [PageController::class, 'bilder'])->name('bilder.en');
+        Route::get('/about', [PageController::class, 'about'])->name('about.en');
 
         Route::get('/blog', [PostController::class, 'index'])->name('blog.index.en');
         Route::get('/blog/{slug}', [PostController::class, 'show'])
