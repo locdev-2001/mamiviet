@@ -213,6 +213,8 @@ if [[ "$FRESH_DB" -eq 1 ]]; then
 else
     log "Running migrations..."
     php artisan migrate --force
+    log "Ensuring homepage section defaults exist..."
+    php artisan db:seed --class=PagesSeeder --force
 fi
 
 # ---------- Cache rebuild ----------

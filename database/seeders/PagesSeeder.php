@@ -13,9 +13,9 @@ class PagesSeeder extends Seeder
         $de = json_decode(file_get_contents(base_path('src/lib/locales/de.json')), true);
         $en = json_decode(file_get_contents(base_path('src/lib/locales/en.json')), true);
 
-        $home = Page::updateOrCreate(
-            ['id' => 1],
-            [
+        $home = Page::where('slug->de', 'home')->first();
+        if (! $home) {
+            $home = Page::create([
                 'slug' => ['de' => 'home', 'en' => 'home'],
                 'status' => 'published',
                 'seo' => [
@@ -28,12 +28,11 @@ class PagesSeeder extends Seeder
                         'description' => 'Authentic Vietnamese cuisine and sushi in Leipzig. Fresh ingredients, traditional recipes. Reserve your table at Restaurant Mamiviet.',
                     ],
                 ],
-            ]
-        );
+            ]);
+        }
 
-        Page::updateOrCreate(
-            ['id' => 2],
-            [
+        if (! Page::where('slug->de', 'bilder')->exists()) {
+            Page::create([
                 'slug' => ['de' => 'bilder', 'en' => 'gallery'],
                 'status' => 'published',
                 'seo' => [
@@ -46,11 +45,11 @@ class PagesSeeder extends Seeder
                         'description' => 'Impressions from Restaurant Mamiviet — dishes, atmosphere, moments. Follow us on Instagram @mami.viet.',
                     ],
                 ],
-            ]
-        );
+            ]);
+        }
 
         foreach ($this->buildHomepageSections($de, $en) as $order => [$key, $content, $data]) {
-            $section = Section::updateOrCreate(
+            $section = Section::firstOrCreate(
                 ['page_id' => $home->id, 'key' => $key],
                 [
                     'enabled' => true,
@@ -59,9 +58,26 @@ class PagesSeeder extends Seeder
                 ]
             );
 
-            $section->setTranslation('content', 'de', $content['de']);
-            $section->setTranslation('content', 'en', $content['en']);
-            $section->save();
+            $changed = false;
+
+            if (blank($section->getTranslation('content', 'de', false))) {
+                $section->setTranslation('content', 'de', $content['de']);
+                $changed = true;
+            }
+
+            if (blank($section->getTranslation('content', 'en', false))) {
+                $section->setTranslation('content', 'en', $content['en']);
+                $changed = true;
+            }
+
+            if ($section->data === null && $data !== null) {
+                $section->data = $data;
+                $changed = true;
+            }
+
+            if ($changed) {
+                $section->save();
+            }
         }
     }
 
