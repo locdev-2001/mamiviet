@@ -20,6 +20,7 @@ class GenerateSitemapCommand extends Command
         $pages = [
             ['de' => '/', 'en' => '/en', 'priority' => 1.0, 'frequency' => Url::CHANGE_FREQUENCY_WEEKLY],
             ['de' => '/bilder', 'en' => '/en/gallery', 'priority' => 0.8, 'frequency' => Url::CHANGE_FREQUENCY_WEEKLY],
+            ['de' => '/ueber-uns', 'en' => '/en/about', 'priority' => 0.8, 'frequency' => Url::CHANGE_FREQUENCY_MONTHLY],
             ['de' => '/blog', 'en' => '/en/blog', 'priority' => 0.9, 'frequency' => Url::CHANGE_FREQUENCY_DAILY],
         ];
 
